@@ -183,12 +183,13 @@ function footer() {
 <a href="tel:${site.phoneHref}">${icon('phone')}<span>${esc(site.phone)}</span></a>
 <a href="mailto:${site.email}">${icon('mail')}<span>${esc(site.email)}</span></a>
 <span class="nap-hours">${icon('clock')}<span>${esc(site.hoursLabel)}</span></span>
+<span class="nap-hours">${icon('check')}<span>Licensed &amp; insured</span></span>
 </address>
 </div>
 <div class="fnav">
 ${col(
   'Services',
-  services.map((s) => [s.title, `/services/${s.slug}/`])
+  services.map((s) => [s.nav || s.title, `/services/${s.slug}/`])
 )}
 ${col(
   'Industries',

@@ -2,9 +2,50 @@
 
 const { site, credentials, clients, serviceCategories, services, industries, areas, homeFaqs, pillars, process } = require('./data');
 const { icon, esc, faqList, sectionHead, ctaBand, crumbs } = require('./ui');
-const { heroGraphic } = require('./hero');
+const fs = require('fs');
+const path = require('path');
 
 const svc = (slug) => services.find((s) => s.slug === slug);
+
+const CLIENT_LOGO_DIR = path.join(__dirname, 'assets', 'clients');
+const CLIENT_LOGO_HEIGHT = 34;
+
+/** Intrinsic size of an SVG or PNG, so logos can declare width and height. */
+function imageSize(file) {
+  const buf = fs.readFileSync(file);
+  if (/\.svg$/i.test(file)) {
+    const head = buf.toString('utf8', 0, 4000);
+    const vb = head.match(/viewBox\s*=\s*["']([-\d.eE+\s,]+)["']/);
+    if (vb) {
+      const n = vb[1].trim().split(/[\s,]+/).map(Number);
+      if (n.length === 4 && n[2] > 0 && n[3] > 0) return { w: n[2], h: n[3] };
+    }
+    const w = head.match(/\swidth\s*=\s*["'](\d+(?:\.\d+)?)/);
+    const h = head.match(/\sheight\s*=\s*["'](\d+(?:\.\d+)?)/);
+    if (w && h) return { w: +w[1], h: +h[1] };
+    return null;
+  }
+  if (buf.length > 24 && buf.readUInt32BE(0) === 0x89504e47) {
+    return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20) };
+  }
+  return null;
+}
+
+/**
+ * One entry in the client strip. Falls back to the name as a wordmark until a
+ * logo file is dropped into src/assets/clients/, so the strip is never broken.
+ */
+function clientMark(c) {
+  const file = c.logo ? path.join(CLIENT_LOGO_DIR, c.logo) : null;
+  if (file && fs.existsSync(file)) {
+    const size = imageSize(file);
+    const dims = size
+      ? ` width="${Math.round((size.w / size.h) * CLIENT_LOGO_HEIGHT)}" height="${CLIENT_LOGO_HEIGHT}"`
+      : '';
+    return `<li><img src="/clients/${c.logo}" alt="${esc(c.name)}"${dims} loading="lazy" decoding="async"></li>`;
+  }
+  return `<li class="client-name">${esc(c.name)}</li>`;
+}
 
 /** Service card linking to its detail page. */
 function serviceCard(s) {
@@ -58,27 +99,16 @@ function home() {
   const body = `
 <section class="hero">
 <div class="wrap hero-in">
-<div class="hero-copy">
 <p class="eyebrow">Tampa Bay &middot; Managed IT &amp; Low-Voltage</p>
 <h1>Designed, installed and supported by <span class="hl">the same team</span>.</h1>
-<p class="hero-lead">Crossroads Technology is a single technology contractor for Tampa Bay business &mdash; network, structured cabling, security cameras, AV and Microsoft 365. One scope, one schedule, one company accountable for whether it works.</p>
+<p class="hero-lead">Crossroads Technology is a single technology contractor for Tampa Bay business &mdash; network and Wi-Fi, cabling, security cameras, access control, AV and Microsoft 365. One scope, one schedule, one company accountable for whether it works.</p>
 <div class="hero-acts">
 <a class="btn btn-lg" href="/contact/">Get a quote</a>
 <a class="btn btn-ghost btn-lg" href="tel:${site.phoneHref}">${icon('phone')}<span>${esc(site.phone)}</span></a>
 </div>
 <p class="hero-note">${icon('pin')}<span>Based in Tampa &middot; Serving Tampa Bay and Orlando</span></p>
 </div>
-<div class="hero-art">${heroGraphic()}</div>
-</div>
 </section>
-
-<div class="trust"><div class="wrap trust-in">
-<span><i class="dot"></i><b>Cisco 360 Partner</b></span>
-<span><i class="dot"></i><b>Zoom Partner</b></span>
-<span><i class="dot"></i><b>Microsoft 365 &amp; Google Workspace</b></span>
-<span><i class="dot"></i><b>Fluke-Certified Cable Testing</b></span>
-<span><i class="dot"></i><b>Licensed &amp; Insured</b></span>
-</div></div>
 
 <section class="sec">
 <div class="wrap">
@@ -97,14 +127,14 @@ ${sectionHead(
 <div class="wrap clients-in">
 <p class="clients-lbl">Trusted by</p>
 <ul class="clients-list">
-${clients.map((c) => `<li>${esc(c)}</li>`).join('')}
+${clients.map(clientMark).join('')}
 </ul>
 </div>
 </section>
 
 <section class="sec sec-dark">
 <div class="wrap">
-${sectionHead('Why Crossroads', 'One team, accountable for all of it')}
+${sectionHead('Why Crossroads', 'What changes when one company owns the whole scope')}
 <div class="grid g2">
 ${pillars
   .map(
@@ -123,7 +153,7 @@ ${pillars
 ${sectionHead(
   'Who we work with',
   'Industries we know well',
-  'We are not generalists pretending. These are the environments we are in every week, and we know where their problems come from.',
+  'These are not markets we dabble in. They are the buildings we are in every week, and we know where their problems start.',
   'center'
 )}
 <div class="grid g4">${industries.map(industryCard).join('')}</div>
@@ -143,7 +173,7 @@ ${process
 
 <section class="sec sec-soft">
 <div class="wrap">
-${sectionHead('Partners & standards', 'Certified where it counts', '', 'center')}
+${sectionHead('Partners & certifications', 'The vendors we build on', 'Hardware, software and platform relationships we hold directly, so licensing, warranty and escalation go through us rather than a reseller you have never spoken to.', 'center')}
 <div class="grid g3">
 ${credentials.map((c) => `<div class="cred"><b>${esc(c.label)}</b><span>${esc(c.detail)}</span></div>`).join('')}
 </div>
@@ -164,7 +194,7 @@ ${areas
     (a) => `<a class="card" href="/service-areas/${a.slug}/">
 <span class="card-ico">${icon('pin')}</span>
 <h3>${esc(a.city)}, FL</h3>
-<p>${esc(a.metaDescription.split('.')[0])}.</p>
+<p>${esc(a.cardBlurb)}</p>
 <span class="card-more">View area ${icon('arrow')}</span>
 </a>`
   )
@@ -191,7 +221,7 @@ ${ctaBand(
     top: 'home',
     metaTitle: 'Managed IT, Cabling & AV in Tampa Bay | Crossroads Technology',
     metaDescription:
-      'Tampa Bay managed IT and low-voltage contractor. Networking, structured cabling, security cameras, AV and Microsoft 365 from one accountable team.',
+      'Tampa Bay managed IT and low-voltage contractor. Networking, cabling, security cameras, access control, AV and Microsoft 365 from one accountable team.',
     faqs: homeFaqs,
     body,
   };
@@ -207,7 +237,7 @@ function servicesIndex() {
   const body = `${crumbs(trail)}
 ${pageHead(
   'Technology Services for Tampa Bay Businesses',
-  'Managed IT, networking, cabling, cameras, AV and cloud — delivered by one contractor so nothing falls between vendors.'
+  'Managed IT, networking, low-voltage cabling, cameras, access control, AV and cloud — delivered by one contractor so nothing falls between vendors.'
 )}
 ${serviceCategories
   .map(
@@ -237,7 +267,7 @@ ${ctaBand(site, 'Not sure which scope you need?', 'Describe the problem and we w
     top: 'services',
     metaTitle: 'IT, Cabling, Camera & AV Services in Tampa Bay',
     metaDescription:
-      'Managed IT, business networking and Wi-Fi, structured cabling, security cameras, AV, Microsoft 365 and office moves for Tampa Bay and Orlando businesses.',
+      'Managed IT, business networking and Wi-Fi, low-voltage cabling, security cameras, access control, AV and Microsoft 365 for Tampa Bay and Orlando businesses.',
     crumbs: trail,
     body,
   };
@@ -381,7 +411,7 @@ ${areas
     (a) => `<a class="card" href="/service-areas/${a.slug}/">
 <span class="card-ico">${icon('pin')}</span>
 <h3>${esc(a.city)}, FL</h3>
-<p>${esc(a.intro.slice(0, 150))}…</p>
+<p>${esc(a.cardBlurb)}</p>
 <span class="card-more">View area ${icon('arrow')}</span>
 </a>`
   )
@@ -423,7 +453,7 @@ function areaPage(a) {
   ];
 
   const body = `${crumbs(trail)}
-${pageHead(a.h1, `Managed IT, networking, structured cabling, security cameras and AV for businesses in ${a.city} and the surrounding area.`)}
+${pageHead(a.h1, `Managed IT, networking, low-voltage cabling, security cameras, access control and AV for businesses in ${a.city} and the surrounding area.`)}
 <section class="sec">
 <div class="wrap split">
 <div class="prose">
@@ -442,7 +472,7 @@ ${pageHead(a.h1, `Managed IT, networking, structured cabling, security cameras a
 ${sidebar('Popular services', [
   ['Managed IT Services', '/services/managed-it-services/'],
   ['Networking & Wi-Fi', '/services/networking-wifi/'],
-  ['Structured Cabling', '/services/structured-cabling/'],
+  ['Low-Voltage Cabling', '/services/structured-cabling/'],
   ['Security Cameras', '/services/security-cameras/'],
   ['All service areas', '/service-areas/'],
 ])}
@@ -518,7 +548,7 @@ ${sidebar('Company', [
 
 <section class="sec sec-dark">
 <div class="wrap">
-${sectionHead('Partners & standards', 'Certified where it counts', '', 'center')}
+${sectionHead('Partners & certifications', 'The vendors we build on', 'Hardware, software and platform relationships we hold directly, so licensing, warranty and escalation go through us rather than a reseller you have never spoken to.', 'center')}
 <div class="grid g3">
 ${credentials.map((c) => `<div class="card"><h3>${esc(c.label)}</h3><p>${esc(c.detail)}</p></div>`).join('')}
 </div>
@@ -602,7 +632,7 @@ ${areas.map((a) => `<li><a href="/service-areas/${a.slug}/">${esc(a.city)}, FL</
     path: '/contact/',
     top: 'contact',
     metaTitle: 'Contact Crossroads Technology | Tampa IT Support & Cabling',
-    metaDescription: `Contact Crossroads Technology in Tampa, FL. Call ${site.phone} for managed IT, networking, structured cabling, security cameras and AV across Tampa Bay and Orlando.`,
+    metaDescription: `Contact Crossroads Technology in Tampa, FL. Call ${site.phone} for managed IT, networking, low-voltage cabling, cameras, access control and AV across Tampa Bay.`,
     crumbs: trail,
     body,
   };

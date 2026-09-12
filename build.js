@@ -264,6 +264,18 @@ function build() {
   write('logo.svg', tight);
   write('logo-light.svg', tight.replace(/#1b3f8f/gi, '#ffffff').replace(/#1a408d/gi, '#ffffff'));
 
+  // Client logos, if any have been supplied.
+  const clientDir = path.join(SRC, 'assets', 'clients');
+  let logoCount = 0;
+  if (fs.existsSync(clientDir)) {
+    for (const f of fs.readdirSync(clientDir)) {
+      // Images only — the folder also holds a README for whoever adds logos.
+      if (!/\.(svg|png|jpe?g|webp|avif)$/i.test(f)) continue;
+      write(path.posix.join('clients', f), fs.readFileSync(path.join(clientDir, f)));
+      logoCount++;
+    }
+  }
+
   // Icons and social card
   write('favicon.svg', FAVICON_SVG);
   write('apple-touch-icon.png', iconImage(180));
@@ -355,6 +367,7 @@ function build() {
   console.log(`  stylesheet       ${kb(cssBytes)}`);
   console.log(`  og image         ${kb(ogBytes)}`);
   console.log(`  largest page     ${largest.path} (${kb(largest.size)})`);
+  console.log(`  client logos     ${logoCount || 'none supplied — names render as text'}`);
   console.log(`  output           dist/\n`);
 }
 

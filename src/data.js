@@ -13,7 +13,7 @@ const site = {
   tagline: 'One technology contractor, accountable end to end.',
   founded: '2024-04-01',
   description:
-    'Crossroads Technology is a Tampa Bay managed IT and low-voltage contractor. Managed IT, networking and Wi-Fi, structured cabling, security cameras, AV and Microsoft 365 — one team, end to end.',
+    'Crossroads Technology is a Tampa Bay managed IT and low-voltage contractor. Networking and Wi-Fi, cabling, security cameras, access control, AV and Microsoft 365 — one team, end to end.',
   phone: '(813) 921-5733',
   phoneHref: '+18139215733',
   phoneE164: '+1-813-921-5733',
@@ -42,19 +42,35 @@ const site = {
 };
 
 /**
- * Clients already named publicly on the current site. Text wordmarks for now —
- * drop real logo files in src/assets/ and swap this for <img> if they arrive.
+ * Clients already named publicly on the current site.
+ *
+ * Drop a logo file into src/assets/clients/ matching the `logo` field and the
+ * build swaps the wordmark for the image automatically, reading its intrinsic
+ * size so there is no layout shift. Until a file exists the name renders as
+ * styled text, so the strip is never broken.
  */
-const clients = ['ITD Cloud', 'iDogCam', 'Helium Mobile', 'Florida Lantern Project'];
+const clients = [
+  { name: 'ITD Cloud', logo: 'itd-cloud.svg' },
+  { name: 'iDogCam', logo: 'idogcam.svg' },
+  { name: 'Helium Mobile', logo: 'helium-mobile.svg' },
+  { name: 'Florida Lantern Project', logo: 'florida-lantern-project.svg' },
+];
 
-/** Partner and certification signals. Text only — no third-party logo files required. */
+/**
+ * Partner and vendor relationships. These appear in exactly one place on the
+ * site — the "Partners & certifications" section on the home page. Do not
+ * repeat partner or certification claims in service copy; capability language
+ * belongs there instead.
+ */
 const credentials = [
-  { label: 'Cisco 360 Partner', detail: 'Networking and switching' },
-  { label: 'Zoom Partner', detail: 'Meetings and conference rooms' },
-  { label: 'Microsoft 365', detail: 'Tenant setup, security and support' },
-  { label: 'Google Workspace', detail: 'Admin, migration and Classroom' },
-  { label: 'SMART Displays', detail: 'Interactive boards for classrooms' },
-  { label: 'Fluke-Certified Testing', detail: 'Every cable tested and documented' },
+  { label: 'Microsoft', detail: 'Microsoft 365, Windows and tenant security' },
+  { label: 'Google', detail: 'Workspace, Chromebooks and Classroom' },
+  { label: 'Zoom', detail: 'Meetings, phone and conference rooms' },
+  { label: 'Adobe', detail: 'Creative Cloud licensing and deployment' },
+  { label: 'HPE', detail: 'Servers, storage and Aruba networking' },
+  { label: 'Dell', detail: 'Workstations, servers and enterprise hardware' },
+  { label: 'Lenovo', detail: 'Workstations, laptops and managed fleets' },
+  { label: 'SMART Technologies', detail: 'Interactive displays for classrooms' },
 ];
 
 /**
@@ -141,11 +157,11 @@ const services = [
     h1: 'Business Networking & Wi-Fi Installation',
     metaTitle: 'Business Wi-Fi & Network Installation | Tampa Bay',
     metaDescription:
-      'Business-grade network and Wi-Fi design, installation and support in Tampa Bay. Firewalls, switching, VLANs and wireless surveys from a Cisco 360 Partner.',
+      'Business-grade network and Wi-Fi design, installation and support in Tampa Bay. Firewalls, switching, VLANs and wireless surveys, designed for the building.',
     blurb:
       'Firewalls, switching, VLANs and wireless that holds up under a full building of users — designed, installed and documented.',
     icon: 'network',
-    keywords: 'business wifi installation Tampa, commercial network installation, Cisco partner Tampa',
+    keywords: 'business wifi installation Tampa, commercial network installation, business network design',
     intro:
       'Consumer gear fails in a commercial building for predictable reasons: not enough access points, no wired backhaul, one flat network carrying cameras and guests and payroll together, and no one watching it. We design networks the way they should be built — properly segmented, wired back to a real switch, and documented so the next technician is not guessing.',
     body: [
@@ -179,7 +195,7 @@ const services = [
       },
       {
         q: 'What network hardware do you install?',
-        a: 'We are a Cisco 360 Partner and also deploy Meraki, UniFi and Fortinet depending on what the site needs and what you want to spend. We will explain the trade-offs rather than defaulting to one line.',
+        a: 'We work across the major business lines rather than reselling one of them, and we pick per site based on what the building needs, what your team can administer and what you want to spend. We will explain the trade-offs rather than defaulting to whatever we stock.',
       },
     ],
     related: ['structured-cabling', 'managed-it-services', 'internet-phone-systems'],
@@ -188,8 +204,8 @@ const services = [
     slug: 'structured-cabling',
     category: 'infrastructure',
     featured: true,
-    nav: 'Structured Cabling',
-    title: 'Structured Cabling & Low-Voltage',
+    nav: 'Low-Voltage Cabling',
+    title: 'Low-Voltage & Structured Cabling',
     h1: 'Structured Cabling & Low-Voltage Installation',
     metaTitle: 'Structured Cabling & Low Voltage | Tampa & Orlando',
     metaDescription:
@@ -307,7 +323,7 @@ const services = [
     h1: 'Audio Visual Installation for Business & Worship',
     metaTitle: 'AV Installation Tampa | Conference Rooms & Worship',
     metaDescription:
-      'Conference room AV, classroom displays and church sound and projection in Tampa Bay. Zoom Partner and SMART display installer — designed, installed and supported.',
+      'Conference room AV, classroom displays and church sound and projection in Tampa Bay. Designed, installed and supported so the room works without a technician.',
     blurb:
       'Conference rooms, classroom displays, sanctuary sound and projection — specified, installed and supported so they work without a technician in the room.',
     icon: 'display',
@@ -317,7 +333,7 @@ const services = [
     body: [
       {
         h: 'Conference and meeting rooms',
-        p: 'One-touch join, a camera that frames the room, and microphones that pick up the far end of the table. We are a Zoom Partner and build rooms around Zoom, Microsoft Teams or Google Meet depending on what your organization already runs.',
+        p: 'One-touch join, a camera that frames the room, and microphones that pick up the far end of the table. We build rooms around Zoom, Microsoft Teams or Google Meet depending on what your organization already runs.',
         list: [
           'Displays, mounts and video walls',
           'Conferencing cameras, speakerphones and ceiling microphones',
@@ -610,13 +626,13 @@ const services = [
     h1: 'Technology Audits & System Reviews',
     metaTitle: 'Technology Audit Services Tampa | Crossroads Technology',
     metaDescription:
-      'Independent technology audits for Tampa Bay businesses. We document what you have, find the risks and bottlenecks, and hand you a prioritised plan that is yours.',
+      'Independent technology audits for Tampa Bay businesses. We document what you have, find the risks and bottlenecks, and hand you a prioritized plan that is yours.',
     blurb:
-      'We document what you actually have, find the risks and the bottlenecks, and hand you a prioritised plan that is yours to keep.',
+      'We document what you actually have, find the risks and the bottlenecks, and hand you a prioritized plan that is yours to keep.',
     icon: 'audit',
     keywords: 'technology audit Tampa, IT assessment, network assessment Tampa',
     intro:
-      'Most organisations cannot answer basic questions about their own systems: what is in the closet, who has administrator access, when the firewall was last updated, whether the backup has ever been restored. An audit answers them in writing. It is also the honest way to find out whether you are being well served by whoever supports you now.',
+      'Most organizations cannot answer basic questions about their own systems: what is in the closet, who has administrator access, when the firewall was last updated, whether the backup has ever been restored. An audit answers them in writing. It is also the honest way to find out whether you are being well served by whoever supports you now.',
     body: [
       {
         h: 'What the audit covers',
@@ -780,30 +796,33 @@ const industries = [
 const areas = [
   {
     slug: 'tampa',
+    cardBlurb: 'Our home market. Managed IT, networking, cabling, cameras and AV across Hillsborough County.',
     city: 'Tampa',
     title: 'Tampa',
     h1: 'IT Services & Low-Voltage in Tampa, FL',
     metaTitle: 'Managed IT & Low Voltage Services in Tampa, FL',
     metaDescription:
-      'Tampa-based managed IT, networking, structured cabling, security cameras and AV. Local techs, direct communication and one vendor for the whole technology scope.',
+      'Tampa-based managed IT, networking, low-voltage cabling, security cameras and AV. Local techs, direct communication and one vendor for the whole technology scope.',
     intro:
       'Our office is in Tampa, off Camden Bay Drive near the Countryway corridor, and Tampa is where we do the most work. Westshore and downtown offices, professional practices, schools and warehouse space across Hillsborough County are all inside our normal service radius.',
     neighborhoods: ['Westshore', 'Downtown Tampa', 'Ybor City', 'Carrollwood', 'Town \'N\' Country', 'Temple Terrace', 'Channelside', 'Citrus Park'],
   },
   {
     slug: 'st-petersburg',
+    cardBlurb: 'Offices, schools and churches across Pinellas — remote support daily, on site when it matters.',
     city: 'St. Petersburg',
     title: 'St. Petersburg',
     h1: 'IT Services & Low-Voltage in St. Petersburg, FL',
     metaTitle: 'Managed IT & Low Voltage in St. Petersburg, FL',
     metaDescription:
-      'Managed IT, business Wi-Fi, structured cabling, cameras and AV for St. Petersburg businesses, schools and churches. Same-day remote support, on-site when needed.',
+      'Managed IT, business Wi-Fi, low-voltage cabling, cameras and AV for St. Petersburg businesses, schools and churches. Same-day remote support, on-site when needed.',
     intro:
       'We cross the bay regularly for St. Petersburg clients — professional offices downtown, schools and churches through the Pinellas side, and retail along the 4th Street and Central Avenue corridors.',
     neighborhoods: ['Downtown St. Pete', 'Gateway', 'Kenwood', 'Old Northeast', 'Pinellas Park', 'Gulfport', 'Seminole', 'Tyrone'],
   },
   {
     slug: 'clearwater',
+    cardBlurb: 'IT support, cabling, cameras and AV for Clearwater and the north Pinellas corridor.',
     city: 'Clearwater',
     title: 'Clearwater',
     h1: 'IT Services & Low-Voltage in Clearwater, FL',
@@ -816,24 +835,26 @@ const areas = [
   },
   {
     slug: 'brandon',
+    cardBlurb: 'New commercial space across Brandon and east Hillsborough, wired and supported end to end.',
     city: 'Brandon',
     title: 'Brandon',
     h1: 'IT Services & Low-Voltage in Brandon, FL',
     metaTitle: 'Managed IT & Low Voltage Services in Brandon, FL',
     metaDescription:
-      'Managed IT, business networking, structured cabling and security cameras for Brandon and east Hillsborough businesses. Local, responsive and documented.',
+      'Managed IT, business networking, low-voltage cabling and security cameras for Brandon and east Hillsborough businesses. Local, responsive and documented.',
     intro:
       'Brandon, Riverview and east Hillsborough are growing fast, and a lot of that growth is new commercial space that needs cabling, network and cameras from scratch. We handle the whole scope so a new location opens on schedule.',
     neighborhoods: ['Brandon', 'Riverview', 'Valrico', 'Lithia', 'Seffner', 'Plant City', 'Apollo Beach', 'Bloomingdale'],
   },
   {
     slug: 'orlando',
+    cardBlurb: 'Project work along the I-4 corridor, weighted toward retail buildout low-voltage.',
     city: 'Orlando',
     title: 'Orlando',
     h1: 'Low-Voltage & IT Services in Orlando, FL',
     metaTitle: 'Low Voltage & IT Services in Orlando, FL',
     metaDescription:
-      'Structured cabling, retail buildout low-voltage, networking and cameras in Orlando and the I-4 corridor. Certified, documented, on the GC schedule.',
+      'Low-voltage cabling, retail buildouts, networking and cameras in Orlando and along the I-4 corridor. Certified, documented, on the GC schedule.',
     intro:
       'We take project work across the Orlando market and the I-4 corridor, with a particular focus on retail buildouts and new construction low-voltage — brand-specified cabling, Fluke certification and closeout documentation delivered on the general contractor\'s schedule.',
     neighborhoods: ['Downtown Orlando', 'Winter Park', 'Lake Nona', 'Altamonte Springs', 'Kissimmee', 'Maitland', 'Winter Garden', 'Sanford'],
@@ -852,7 +873,7 @@ const homeFaqs = [
   },
   {
     q: 'Do you work with businesses that already have an IT provider?',
-    a: 'Frequently. Many clients bring us in for infrastructure work their current provider does not do — structured cabling, cameras, AV, office moves — while keeping their existing help desk. Others move everything to us after the first project. Either is fine.',
+    a: 'Frequently. Many clients bring us in for infrastructure work their current provider does not do — low-voltage cabling, cameras, access control, AV — while keeping their existing help desk. Others move everything to us after the first project. Either is fine.',
   },
   {
     q: 'Do you handle both the cabling and the IT support?',
@@ -882,8 +903,8 @@ const pillars = [
   },
   {
     icon: 'hub',
-    h: 'One contractor, end to end',
-    p: 'Cabling, network, internet, phones, cameras, AV and ongoing support under one company. One scope, one schedule, and no gap between trades for a problem to fall into.',
+    h: 'Every trade under one contract',
+    p: 'Cabling, network, internet, phones, cameras, AV and ongoing support from one company on one schedule, so there is no seam between trades for a problem to fall into.',
   },
   {
     icon: 'check',

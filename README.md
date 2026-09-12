@@ -37,8 +37,7 @@ Frameworks work against both. So:
 | Inline SVG icons, SVG logo | Two network requests per page: the HTML and one stylesheet. |
 | Content in one data file | Phone number, address and hours appear in many places. They are defined once, so they cannot drift out of sync — which matters for local SEO. |
 
-Home page: **~11.7 KB gzipped HTML + 5.1 KB CSS**, including the inline
-vector hero. Interior pages are around 6 KB.
+Home page: **~9 KB gzipped HTML + 5 KB CSS.** Interior pages are around 6 KB.
 
 ---
 
@@ -54,6 +53,7 @@ src/
   ui.js               Icons and small reusable components
   styles.css          The entire stylesheet
   assets/logo.svg     Official brand logo, unmodified
+  assets/clients/     Client logo files (see the README in that folder)
 dist/                 Build output (git-ignored)
 ```
 
@@ -74,6 +74,22 @@ dist/                 Build output (git-ignored)
 - **Industries** — the `industries` array, same pattern.
 - **Service areas** — the `areas` array, same pattern.
 - **Home page FAQs** — `homeFaqs`. These carry the FAQ rich-result markup.
+- **Partners** — `credentials`. These render in exactly one place, the
+  "Partners & certifications" section on the home page. Do not repeat partner
+  or certification claims in service copy — describe the capability instead.
+- **Clients** — `clients`. Name plus an optional logo filename.
+
+### House rules for copy
+
+- **US spelling**, not British. This is a Tampa business.
+- **"Structured cabling" stays on its own service page.** Everywhere else —
+  taglines, meta descriptions, area pages, the footer — say "low-voltage" or
+  just "cabling". The search term still has one strong page to rank with, and
+  the brand does not read as a cable contractor.
+- **No vendor names outside the partners section.**
+- Give a card its own short blurb rather than truncating prose. An earlier
+  version built area cards by cutting the meta description at the first period
+  and produced "...and AV for St." on the St. Petersburg card.
 
 ### Adding a new service page
 
@@ -109,8 +125,8 @@ Both colors are taken from the official logo and should not be changed.
 
 ### Motion
 
-Restrained by intent: a 9s breathe on the dome, staggered signal-ring pulses,
-and a short slide as sections enter (CSS scroll-driven, no JavaScript). The
+Restrained by intent: a short slide as sections enter, CSS scroll-driven, no
+JavaScript. That is the whole of it. The
 reveal animates **transform only, never opacity** — a scroll-driven opacity
 fade leaves everything below the fold at `opacity: 0` until someone scrolls,
 and a crawler that renders without scrolling sees a blank page. Do not add
@@ -170,8 +186,10 @@ markup.
       text. A designed 1200×630 card with the logo and tagline will convert
       better when links are shared. Drop it in and the build will keep it if
       you remove the generator call, or just overwrite the file after building.
-- [ ] **Swap client wordmarks for logos.** The "Trusted by" strip renders the
-      four client names as text. Real logo files would look stronger.
+- [ ] **Add client logo files.** The "Trusted by" strip renders the four client
+      names as text until logos exist. Drop files into `src/assets/clients/`
+      named to match the `logo` field in `clients` (src/data.js) and the build
+      swaps them in, reading each file's intrinsic size so nothing shifts.
 - [ ] **Add testimonials.** Two real quotes would lift conversion more than
       anything else on the page. Nothing was invented for this build — every
       claim on the site is one the company can stand behind.
