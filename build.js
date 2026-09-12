@@ -15,7 +15,7 @@ const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
 
-const { site } = require('./src/data');
+const { site, legacyRedirects } = require('./src/data');
 const { render } = require('./src/layout');
 const { allPages } = require('./src/pages');
 
@@ -377,8 +377,10 @@ ErrorDocument 404 /404.html
   RewriteRule ^ ${site.origin}%{REQUEST_URI} [R=301,L]
 
   # URLs carried over from the previous site.
-  RewriteRule ^privacy\\.html$ /privacy/ [R=301,L]
-  RewriteRule ^returns\\.html$ /returns/ [R=301,L]
+${legacyRedirects
+  .filter(([from]) => from !== '/index.html')
+  .map(([from, to]) => `  RewriteRule ^${from.replace(/^\//, '').replace(/\./g, '\\.')}$ ${to} [R=301,L]`)
+  .join('\n')}
 
   # Serve /about/ for /about without a redirect hop.
   RewriteCond %{REQUEST_FILENAME} !-f
@@ -415,13 +417,10 @@ AddType application/manifest+json .webmanifest
 `
   );
 
-  // Keep the legacy extensionless URLs working on hosts that do not do it automatically.
+  // Both host formats come from the same list so they cannot drift apart.
   write(
     '_redirects',
-    `/privacy.html  /privacy/  301
-/returns.html  /returns/  301
-/index.html    /          301
-`
+    legacyRedirects.map(([from, to]) => `${from}  ${to}  301`).join('\n') + '\n'
   );
 
   const ms = Date.now() - started;

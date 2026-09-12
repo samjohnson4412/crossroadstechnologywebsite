@@ -75,6 +75,7 @@ dist/                 Build output (git-ignored)
 - **Industries** — the `industries` array, same pattern.
 - **Service areas** — the `areas` array, same pattern.
 - **Home page FAQs** — `homeFaqs`. These carry the FAQ rich-result markup.
+- **Redirects** — `legacyRedirects`. Old URL to new URL; feeds every host config.
 - **Partners** — `credentials`. These render in exactly one place, the
   "Partners & certifications" section on the home page. Do not repeat partner
   or certification claims in service copy — describe the capability instead.
@@ -206,6 +207,68 @@ The output is plain static files. Any host works.
 `wrangler.jsonc` in the repo root points Workers at `dist/` and serves
 `404.html` for unknown paths. There is no Worker script — it is a static
 asset deployment.
+
+### Going live on Cloudflare
+
+The domain and DNS are already on Cloudflare, which removes the risky part —
+no nameserver migration, so nothing can disturb mail.
+
+**1. Deploy the Worker.** Dashboard → *Compute (Workers)* → *Workers & Pages*
+→ *Create* → *Import a repository*. Select this repo.
+
+| Field | Value |
+| --- | --- |
+| Build command | `node build.js` |
+| Deploy command | `npx wrangler deploy` |
+
+No production-branch field appears because the repo has one branch and it is
+the default. `wrangler.jsonc` points Workers at `dist/` and serves `404.html`
+for unknown paths.
+
+**2. Check it on the free URL first.** The deploy lands at
+`crossroads-technology.<subdomain>.workers.dev`. The live site is untouched at
+this point. Read it on a phone before step 3.
+
+**3. Attach the domain.** In the Worker → *Settings* → *Domains & Routes* →
+*Add* → *Custom Domain* → `crossroadstechnology.co`. Cloudflare writes the DNS
+record and issues the certificate itself.
+
+> This is the go-live moment. It replaces whatever currently answers on the
+> apex. Only do it once step 2 looks right.
+
+**Mail is not affected.** A custom domain touches the address record for that
+hostname. MX, SPF, DKIM and DMARC are different record types and are not
+altered, so Google Workspace keeps running.
+
+**4. Redirect www.** *Rules* → *Redirect Rules* → the "Redirect from WWW to
+Root" template, 301. Canonical tags already point at the apex, so this is
+tidiness rather than a ranking fix — but do it.
+
+**5. Turn on Web Analytics.** With the domain proxied, enable it under
+*Analytics & Logs → Web Analytics* and leave `analytics.cloudflareToken` empty
+— Cloudflare injects the beacon itself, so the pages stay free of JavaScript.
+
+**6. Submit the sitemap.** Search Console → add the property → submit
+`https://crossroadstechnology.co/sitemap.xml`.
+
+After this, every push to the branch rebuilds and deploys automatically.
+
+#### Before you cut over: check the old URLs
+
+The largest avoidable risk in a redesign is 404ing pages Google already ranks.
+Open Search Console for the current site and list the indexed URLs. Anything
+that does not exist on the new site should be added to `legacyRedirects` in
+`src/data.js`:
+
+```js
+const legacyRedirects = [
+  ['/privacy.html', '/privacy/'],
+  ['/old-page', '/services/managed-it-services/'],
+];
+```
+
+That one list generates `_redirects` for Cloudflare and the rewrite rules in
+`.htaccess` for Apache, so the two cannot drift apart.
 
 **DreamHost** (or any Apache shared host, over SSH):
 

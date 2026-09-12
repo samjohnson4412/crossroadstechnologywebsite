@@ -62,6 +62,20 @@ const site = {
 };
 
 /**
+ * Redirects from the previous site, applied by every host config.
+ *
+ * Before cutting the domain over, check Search Console for URLs Google has
+ * indexed on the old site and add any that do not exist here. A 404 on an
+ * indexed URL throws away whatever ranking it had; a 301 carries it to the
+ * new page.
+ */
+const legacyRedirects = [
+  ['/privacy.html', '/privacy/'],
+  ['/returns.html', '/returns/'],
+  ['/index.html', '/'],
+];
+
+/**
  * Clients already named publicly on the current site.
  *
  * Drop a logo file into src/assets/clients/ matching the `logo` field and the
@@ -941,4 +955,4 @@ const process = [
   { n: '04', h: 'Document and support', p: 'You get the as-builts, port maps, credentials and test results. Then we support what we built.' },
 ];
 
-module.exports = { site, credentials, clients, serviceCategories, services, industries, areas, homeFaqs, pillars, process };
+module.exports = { site, legacyRedirects, credentials, clients, serviceCategories, services, industries, areas, homeFaqs, pillars, process };
