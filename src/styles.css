@@ -426,6 +426,8 @@ a.card:hover .card-more .ico { transform: translateX(4px); }
 }
 
 .qform p { margin: 0 0 14px; }
+/* Honeypot. Off-screen rather than display:none, which some bots skip. */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .qform label { font-size: .88rem; font-weight: 700; color: var(--ink); display: inline-block; margin-bottom: 6px; }
 .qform input, .qform textarea {
   width: 100%; font: inherit; font-size: .96rem; color: var(--ink);

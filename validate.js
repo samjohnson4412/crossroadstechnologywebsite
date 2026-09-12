@@ -117,9 +117,21 @@ for (const file of htmlFiles) {
 const sitemap = fs.readFileSync(path.join(DIST, 'sitemap.xml'), 'utf8');
 const listed = [...sitemap.matchAll(/<loc>https?:\/\/[^/]+([^<]*)<\/loc>/g)].map((m) => m[1]);
 for (const loc of listed) if (!routes.has(loc)) problems.push(`sitemap.xml lists a route that does not exist: ${loc}`);
+const noindexRoutes = new Set(
+  htmlFiles
+    .filter((f) => /<meta name="robots" content="noindex/.test(fs.readFileSync(f, 'utf8')))
+    .map((f) => {
+      const rel = '/' + path.relative(DIST, f).split(path.sep).join('/');
+      return rel.endsWith('/index.html') ? rel.replace(/index\.html$/, '') : rel;
+    })
+);
 for (const r of routes) {
-  if (r === '/404.html') continue;
+  // A noindex page is meant to be absent from the sitemap.
+  if (noindexRoutes.has(r)) continue;
   if (!listed.includes(r)) warnings.push(`${r} is not listed in sitemap.xml`);
+}
+for (const r of noindexRoutes) {
+  if (listed.includes(r)) problems.push(`${r} is noindex but listed in sitemap.xml`);
 }
 
 // --- Duplicate titles and descriptions ------------------------------------

@@ -70,6 +70,26 @@ function organizationNode() {
   };
 }
 
+/**
+ * Analytics snippets, emitted only when configured. Nothing loads by default,
+ * which is why the pages currently ship with no JavaScript at all.
+ */
+function analyticsTags() {
+  const a = site.analytics || {};
+  let out = '';
+  if (a.cloudflareToken) {
+    out += `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${esc(
+      a.cloudflareToken
+    )}"}'></script>\n`;
+  }
+  if (a.ga4Id) {
+    const id = esc(a.ga4Id);
+    out += `<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>\n`;
+    out += `<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${id}');</script>\n`;
+  }
+  return out;
+}
+
 /** Assemble the JSON-LD graph for a single page. */
 function schemaGraph(page) {
   const graph = [
@@ -256,7 +276,7 @@ ${page.noindex ? '<meta name="robots" content="noindex, follow">' : '<meta name=
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/s.css">
 <script type="application/ld+json">${schemaGraph(page)}</script>
-</head>
+${analyticsTags()}</head>
 <body>
 ${header(page.top)}
 <main id="main">

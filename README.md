@@ -140,6 +140,59 @@ use `--cyan` on dark. All rendered text has been checked at 4.5:1 or better.
 
 ---
 
+## Forms and analytics
+
+Both are off until configured, which is why the pages currently ship with no
+JavaScript at all.
+
+### Contact form
+
+Set `site.formEndpoint` in `src/data.js` to your handler's POST URL:
+
+```js
+formEndpoint: 'https://forms.zohopublic.com/.../formperma/XXXX',
+```
+
+**Zoho Forms is the natural fit** — you already run Zoho Desk, and a Zoho form
+can open a Desk ticket directly, so a lead lands in the system you work from
+rather than a separate inbox. Formspree and Netlify Forms work identically;
+only the URL changes.
+
+Then set the handler's **post-submit redirect** to
+`https://crossroadstechnology.co/thank-you/`. The form also posts `_redirect`
+and `_next` hidden fields, which Formspree and several others honour without
+any dashboard setting.
+
+The form includes a honeypot field named `_gotcha`, positioned off-screen and
+out of the tab order. Formspree drops submissions that fill it. On another
+handler, add a rule to discard any submission where `_gotcha` is non-empty —
+it costs nothing and stops most bot traffic without a CAPTCHA.
+
+Until an endpoint is set, the form falls back to opening the visitor's mail
+client and the contact page shows a setup note. That note disappears on its
+own once `formEndpoint` has a value.
+
+### Analytics
+
+```js
+analytics: {
+  cloudflareToken: '',   // Cloudflare Web Analytics beacon token
+  ga4Id: '',             // "G-XXXXXXX"
+}
+```
+
+**Prefer Cloudflare Web Analytics.** It is free, sets no cookies — so no
+consent banner — and adds a fraction of GA4's weight. Get the token from the
+Cloudflare dashboard under *Analytics & Logs → Web Analytics*. If the domain
+is proxied through Cloudflare you can enable it there instead and leave this
+empty.
+
+Add GA4 only if you need something it uniquely provides, such as Google Ads
+conversion tracking. It is roughly 50 KB of JavaScript against a 14 KB page,
+and it brings cookie-consent obligations with it. Setting both loads both.
+
+---
+
 ## Deploying
 
 The output is plain static files. Any host works.
@@ -206,10 +259,8 @@ markup.
 
 ## Before launch
 
-- [ ] **Wire up the contact form.** It currently falls back to opening the
-      visitor's mail client. Set `formEndpoint` in `src/data.js` to a handler
-      URL (Formspree, Netlify Forms, or Zoho Forms — Zoho is already in use for
-      ticketing) and the form will post directly.
+- [ ] **Wire up the contact form.** Two values, both in `src/data.js`. See
+      "Forms and analytics" below.
 - [ ] **Confirm the published details.** Phone `(813) 921-5733` and the Camden
       Bay address were taken from existing public listings. Verify they are
       current, and decide whether `sales@` is the right inbox.

@@ -35,10 +35,30 @@ const site = {
   hoursLabel: 'Monday – Friday, 8:00am – 5:00pm ET',
   emergencyLabel: 'Emergency support available for managed clients',
 
-  // Set this to a form handler URL (Formspree, Netlify Forms, Zoho Forms) to
-  // receive quote requests directly. Left empty, the contact form falls back
-  // to opening the visitor's email client.
+  // Form handler URL for the contact form. Zoho Forms is the natural choice
+  // here — a submission can open a Desk ticket directly. Formspree and Netlify
+  // Forms work the same way. Left empty, the form falls back to opening the
+  // visitor's email client, which works but is a poor experience.
+  //
+  // Whichever handler you use, set its post-submit redirect to
+  // https://crossroadstechnology.co/thank-you/ so people land back on the site.
   formEndpoint: '',
+
+  // Analytics. Both are optional and both are off until a value is set.
+  //
+  // cloudflareToken — Cloudflare Web Analytics. Free, no cookies, roughly a
+  //   tenth the weight of GA4, and no consent banner needed. Get the token
+  //   from the Cloudflare dashboard under Analytics & Logs > Web Analytics.
+  //   If the domain is proxied through Cloudflare you can enable it there
+  //   instead and skip this entirely.
+  //
+  // ga4Id — Google Analytics 4 ("G-XXXXXXX"). Only worth the ~50 KB and the
+  //   consent obligation if you need Google Ads conversion tracking. If both
+  //   are set, both load.
+  analytics: {
+    cloudflareToken: '',
+    ga4Id: '',
+  },
 };
 
 /**

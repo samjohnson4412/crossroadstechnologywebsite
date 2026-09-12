@@ -579,6 +579,18 @@ function contact() {
     ? ` action="${site.formEndpoint}" method="POST"`
     : ` action="mailto:${site.email}" method="POST" enctype="text/plain"`;
 
+  // Most handlers (Zoho Forms, Formspree, Netlify) accept a redirect target so
+  // the visitor lands back on our page rather than the handler's own screen.
+  const redirectField = site.formEndpoint
+    ? `<input type="hidden" name="_redirect" value="${site.origin}/thank-you/">
+<input type="hidden" name="_next" value="${site.origin}/thank-you/">`
+    : '';
+
+  // Honeypot: visually hidden and out of the tab order, so a person never sees
+  // it and a bot that fills every field marks itself.
+  const honeypot = `<p class="hp" aria-hidden="true"><label>Do not fill this in
+<input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label></p>`;
+
   const body = `${crumbs(trail)}
 ${pageHead('Contact Crossroads Technology', 'Call and you will reach someone who can answer the question — not a call center reading a script.')}
 <section class="sec">
@@ -602,6 +614,8 @@ ${pageHead('Contact Crossroads Technology', 'Call and you will reach someone who
 <h3>Request a quote</h3>
 <p>Tell us what you are working on. We respond the same business day.</p>
 <form${formAction} class="qform">
+${redirectField}
+${honeypot}
 <p><label for="f-name">Name</label><br><input id="f-name" name="name" type="text" autocomplete="name" required></p>
 <p><label for="f-company">Company</label><br><input id="f-company" name="company" type="text" autocomplete="organization"></p>
 <p><label for="f-email">Email</label><br><input id="f-email" name="email" type="email" autocomplete="email" required></p>
@@ -613,7 +627,7 @@ ${pageHead('Contact Crossroads Technology', 'Call and you will reach someone who
 ${
   site.formEndpoint
     ? ''
-    : `<p class="form-note"><strong>Setup note:</strong> this form falls back to opening the visitor's email client. Set <code>formEndpoint</code> in <code>src/data.js</code> to a form handler URL (Formspree, Netlify Forms, Zoho Forms) to receive submissions directly.</p>`
+    : `<p class="form-note"><strong>Setup note:</strong> this form currently falls back to opening the visitor&rsquo;s email client. Set <code>formEndpoint</code> in <code>src/data.js</code> to a Zoho Forms (or Formspree) post URL to receive submissions directly, and point that handler&rsquo;s redirect at <code>/thank-you/</code>.</p>`
 }
 </div>
 </div>
@@ -789,6 +803,57 @@ function returns() {
   });
 }
 
+function thankYou() {
+  const body = `${pageHead(
+    'Thanks — we have got it.',
+    'Your request is in. We respond the same business day, and usually a good deal sooner.'
+  )}
+<section class="sec"><div class="wrap" style="max-width:760px">
+<div class="prose">
+<h2>What happens next</h2>
+<ul>
+<li>A technician reads it &mdash; not an auto-responder and not a queue.</li>
+<li>If anything is unclear we call or email to ask before quoting.</li>
+<li>For cabling, camera or AV work we will schedule a walkthrough, because pricing physical work accurately means seeing the building.</li>
+<li>You get a written quote that says what you get, what it costs and what it does not include.</li>
+</ul>
+<h2>If it is urgent</h2>
+<p>Call <a href="tel:${site.phoneHref}">${esc(site.phone)}</a> rather than waiting on the form. ${esc(
+    site.hoursLabel
+  )}, and ${esc(site.emergencyLabel.toLowerCase())}.</p>
+<p>Existing client with a support issue? Send it to <a href="mailto:${site.supportEmail}">${esc(
+    site.supportEmail
+  )}</a> so it opens a ticket.</p>
+</div>
+</div></section>
+
+<section class="sec sec-soft">
+<div class="wrap">
+${sectionHead('While you wait', 'Have a look at what we cover', '', 'center')}
+<div class="grid g3" style="max-width:980px;margin-inline:auto">
+${services
+  .filter((sv) => sv.featured)
+  .slice(0, 3)
+  .map(serviceCard)
+  .join('')}
+</div>
+<p class="sec-more"><a href="/services/">See all ${services.length} services ${icon('arrow')}</a></p>
+</div>
+</section>`;
+
+  return {
+    path: '/thank-you/',
+    top: 'contact',
+    metaTitle: 'Thanks — request received | Crossroads Technology',
+    metaDescription:
+      'Your request has reached Crossroads Technology. A technician will respond the same business day.',
+    // Not a landing page; keep it out of search results but let it pass link
+    // equity back to the pages it links to.
+    noindex: true,
+    body,
+  };
+}
+
 function notFound() {
   const body = `${pageHead('Page not found', 'That link does not point anywhere on this site — it may have moved or been renamed.')}
 <section class="sec"><div class="wrap" style="max-width:760px">
@@ -822,6 +887,7 @@ function allPages() {
     ...areas.map(areaPage),
     about(),
     contact(),
+    thankYou(),
     privacy(),
     returns(),
     notFound(),
