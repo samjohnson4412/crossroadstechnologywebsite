@@ -228,6 +228,33 @@ Set `main` as the production branch in the Cloudflare build settings, and as
 the default branch in GitHub under *Settings → General*. Nothing else builds
 to the live domain.
 
+#### Finding a preview URL
+
+Preview URLs are issued **per version, not per branch**. The pattern shown in
+the dashboard —
+
+    *-crossroads-technology.crossroads-technology.workers.dev
+
+— has the `*` replaced by the first characters of that build's version ID, so
+every push produces a different URL. There is no fixed address for the working
+branch.
+
+To get the current one: Worker → **Deployments** (or *Versions*) → find the
+version built from the working branch → its preview URL is listed there. It is
+also printed at the end of that build's log.
+
+A preview only exists once a build has run on that branch *after* "Builds for
+non-production branches" was enabled. If none is listed, push a commit.
+
+Preview URLs are public. Every preview build is already marked noindex by
+`build.js` so it cannot compete with the live domain in search; if you also
+want them unreachable without a login, put Cloudflare Access in front via the
+*Enable Access* link beside the preview toggle.
+
+Leaving the **production** `workers.dev` toggle off is the right call — it
+keeps one public address for the live site instead of two serving identical
+content.
+
 ### Going live on Cloudflare
 
 The domain and DNS are already on Cloudflare, which removes the risky part —
