@@ -208,6 +208,26 @@ The output is plain static files. Any host works.
 `404.html` for unknown paths. There is no Worker script — it is a static
 asset deployment.
 
+### Branches
+
+| Branch | Role |
+| --- | --- |
+| `main` | Production. What the live domain serves. |
+| `claude/crossroads-website-redesign-jnpp2k` | Working branch. Builds to a preview URL. |
+
+Work happens on the working branch and gets reviewed on its preview URL.
+Merging into `main` is what publishes:
+
+```bash
+git checkout main
+git merge claude/crossroads-website-redesign-jnpp2k
+git push
+```
+
+Set `main` as the production branch in the Cloudflare build settings, and as
+the default branch in GitHub under *Settings → General*. Nothing else builds
+to the live domain.
+
 ### Going live on Cloudflare
 
 The domain and DNS are already on Cloudflare, which removes the risky part —
@@ -218,20 +238,27 @@ no nameserver migration, so nothing can disturb mail.
 
 | Field | Value |
 | --- | --- |
+| Production branch | `main` |
 | Build command | `node build.js` |
 | Deploy command | `npx wrangler deploy` |
 
-No production-branch field appears because the repo has one branch and it is
-the default. `wrangler.jsonc` points Workers at `dist/` and serves `404.html`
-for unknown paths.
+`wrangler.jsonc` points Workers at `dist/` and serves `404.html` for unknown
+paths. Pushes to `main` deploy to the live domain; pushes to any other branch
+build as previews and never touch it.
 
 **2. Check it on the free URL first.** The deploy lands at
 `crossroads-technology.<subdomain>.workers.dev`. The live site is untouched at
 this point. Read it on a phone before step 3.
 
 **3. Attach the domain.** In the Worker → *Settings* → *Domains & Routes* →
-*Add* → *Custom Domain* → `crossroadstechnology.co`. Cloudflare writes the DNS
-record and issues the certificate itself.
+*Add* → **Custom Domain** → `crossroadstechnology.co`. Cloudflare writes the
+DNS record and issues the certificate itself.
+
+**Custom Domain only — do not also add a Route.** They are alternatives, not a
+pair. A Custom Domain makes the Worker the origin for that hostname, which is
+what hosting a whole site means. A Route puts a Worker in front of an origin
+that already exists, for intercepting part of a site. There is no origin here,
+so a Route is the wrong tool and adding both only creates confusion.
 
 > This is the go-live moment. It replaces whatever currently answers on the
 > apex. Only do it once step 2 looks right.
@@ -240,9 +267,11 @@ record and issues the certificate itself.
 hostname. MX, SPF, DKIM and DMARC are different record types and are not
 altered, so Google Workspace keeps running.
 
-**4. Redirect www.** *Rules* → *Redirect Rules* → the "Redirect from WWW to
-Root" template, 301. Canonical tags already point at the apex, so this is
-tidiness rather than a ranking fix — but do it.
+**4. Redirect www.** The hostname has to reach Cloudflare before a rule can
+fire, so make sure a **proxied** DNS record for `www` exists — a CNAME to
+`crossroadstechnology.co` with the orange cloud on is enough. Then *Rules* →
+*Redirect Rules* → the "Redirect from WWW to Root" template, 301. Canonical
+tags already point at the apex, so this consolidates rather than rescues.
 
 **5. Turn on Web Analytics.** With the domain proxied, enable it under
 *Analytics & Logs → Web Analytics* and leave `analytics.cloudflareToken` empty
