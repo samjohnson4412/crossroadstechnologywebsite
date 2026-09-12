@@ -100,7 +100,7 @@ function home() {
 <section class="hero">
 <div class="wrap hero-in">
 <p class="eyebrow">Tampa Bay &middot; Managed IT &amp; Low-Voltage</p>
-<h1>Designed, installed and supported by <span class="hl">the same team</span>.</h1>
+<h1>TEST TITLE</h1>
 <p class="hero-lead">Crossroads Technology is a single technology contractor for Tampa Bay business &mdash; network and Wi-Fi, cabling, security cameras, access control, AV and Microsoft 365. One scope, one schedule, one company accountable for whether it works.</p>
 <div class="hero-acts">
 <a class="btn btn-lg" href="/contact/">Get a quote</a>
