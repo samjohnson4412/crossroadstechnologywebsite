@@ -10,7 +10,7 @@ const site = {
   name: 'Crossroads Technology',
   legalName: 'Crossroads Tech & Travel Group, Inc.',
   origin: 'https://crossroadstechnology.co',
-  tagline: 'Built by techs, not salespeople.',
+  tagline: 'One technology contractor, accountable end to end.',
   founded: '2024-04-01',
   description:
     'Crossroads Technology is a Tampa Bay managed IT and low-voltage contractor. Managed IT, networking and Wi-Fi, structured cabling, security cameras, AV and Microsoft 365 — one team, end to end.',
@@ -40,6 +40,12 @@ const site = {
   // to opening the visitor's email client.
   formEndpoint: '',
 };
+
+/**
+ * Clients already named publicly on the current site. Text wordmarks for now —
+ * drop real logo files in src/assets/ and swap this for <img> if they arrive.
+ */
+const clients = ['ITD Cloud', 'iDogCam', 'Helium Mobile', 'Florida Lantern Project'];
 
 /** Partner and certification signals. Text only — no third-party logo files required. */
 const credentials = [
@@ -661,8 +667,8 @@ const homeFaqs = [
     a: 'We are based in Tampa and serve the Tampa Bay region — Tampa, St. Petersburg, Clearwater, Brandon and the surrounding Hillsborough and Pinellas communities. We also take project work in Orlando and along the I-4 corridor.',
   },
   {
-    q: 'What does "built by techs, not salespeople" actually mean?',
-    a: 'It means the people who scope your project are the people who install and support it. Our founder spent five years as a contractor in the field before starting the company, and the business was built specifically to remove the middle layers that slow good work down. You get a direct line to a technician rather than an account manager relaying messages.',
+    q: 'What makes Crossroads different from other IT providers?',
+    a: 'Continuity and scope. The person who walks your building and writes the scope is the person who installs it and supports it, so nothing is lost in a handoff. And because we cover cabling, network, cameras, AV and ongoing IT under one company, there is no gap between trades and no vendor to blame. Our founder spent five years contracting in this industry before starting the company, and built it without the account-management layer that slows decisions down.',
   },
   {
     q: 'Do you work with businesses that already have an IT provider?',
@@ -686,23 +692,23 @@ const homeFaqs = [
 const pillars = [
   {
     icon: 'wrench',
-    h: 'You talk to the tech',
-    p: 'No account manager relaying messages to someone who has never seen your building. You reach the person who installed it and knows why it was built that way.',
+    h: 'Continuity from scope to support',
+    p: 'The person who walks your building and writes the scope is the person who installs it and supports it afterward. Nothing is lost in a handoff, and nobody has to go ask someone who has never seen the site.',
   },
   {
     icon: 'layers',
     h: 'No middle layers',
-    p: 'This company exists because our founder spent five years watching good work get slowed down by unnecessary hand-offs. We took them out. Decisions happen in one conversation.',
+    p: 'Our founder spent five years contracting in this industry before starting the company, and built it specifically without the account-management layer that slows decisions down. You reach someone who can answer.',
   },
   {
     icon: 'hub',
-    h: 'One vendor, end to end',
-    p: 'Cabling, network, internet, phones, cameras, AV and ongoing support from one contractor. Nobody to point at when something does not work.',
+    h: 'One contractor, end to end',
+    p: 'Cabling, network, internet, phones, cameras, AV and ongoing support under one company. One scope, one schedule, and no gap between trades for a problem to fall into.',
   },
   {
     icon: 'check',
-    h: 'We own the outcome',
-    p: 'If it is in our scope, it is our problem until it works. We test, certify and document what we install, and you get the documentation.',
+    h: 'Documented and certified',
+    p: 'Every run is tested and labeled, every closet photographed, every network mapped. You receive the as-builts, port maps and certification results, and they remain yours.',
   },
 ];
 
@@ -713,4 +719,4 @@ const process = [
   { n: '04', h: 'Document and support', p: 'You get the as-builts, port maps, credentials and test results. Then we support what we built.' },
 ];
 
-module.exports = { site, credentials, services, industries, areas, homeFaqs, pillars, process };
+module.exports = { site, credentials, clients, services, industries, areas, homeFaqs, pillars, process };

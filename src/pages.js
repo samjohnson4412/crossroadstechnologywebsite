@@ -1,7 +1,8 @@
 'use strict';
 
-const { site, credentials, services, industries, areas, homeFaqs, pillars, process } = require('./data');
+const { site, credentials, clients, services, industries, areas, homeFaqs, pillars, process } = require('./data');
 const { icon, esc, faqList, sectionHead, ctaBand, crumbs } = require('./ui');
+const { heroGraphic } = require('./hero');
 
 const svc = (slug) => services.find((s) => s.slug === slug);
 
@@ -57,14 +58,17 @@ function home() {
   const body = `
 <section class="hero">
 <div class="wrap hero-in">
+<div class="hero-copy">
 <p class="eyebrow">Tampa Bay &middot; Managed IT &amp; Low-Voltage</p>
-<h1>Built by techs,<br><span class="hl">not salespeople.</span></h1>
-<p class="hero-lead">Crossroads Technology is a Tampa IT and low-voltage contractor run by the people who actually do the work. One team for your network, cabling, cameras, AV and Microsoft 365 &mdash; no middle layers, no finger-pointing, no waiting on an account manager to relay a message.</p>
+<h1>Designed, installed and supported by <span class="hl">the same team</span>.</h1>
+<p class="hero-lead">Crossroads Technology is a single technology contractor for Tampa Bay business &mdash; network, structured cabling, security cameras, AV and Microsoft 365. One scope, one schedule, one company accountable for whether it works.</p>
 <div class="hero-acts">
 <a class="btn btn-lg" href="/contact/">Get a quote</a>
 <a class="btn btn-ghost btn-lg" href="tel:${site.phoneHref}">${icon('phone')}<span>${esc(site.phone)}</span></a>
 </div>
 <p class="hero-note">${icon('pin')}<span>Based in Tampa &middot; Serving Tampa Bay and Orlando</span></p>
+</div>
+<div class="hero-art">${heroGraphic()}</div>
 </div>
 </section>
 
@@ -88,9 +92,18 @@ ${sectionHead(
 </div>
 </section>
 
+<section class="clients">
+<div class="wrap clients-in">
+<p class="clients-lbl">Trusted by</p>
+<ul class="clients-list">
+${clients.map((c) => `<li>${esc(c)}</li>`).join('')}
+</ul>
+</div>
+</section>
+
 <section class="sec sec-dark">
 <div class="wrap">
-${sectionHead('Why Crossroads', 'The difference is who shows up')}
+${sectionHead('Why Crossroads', 'One team, accountable for all of it')}
 <div class="grid g2">
 ${pillars
   .map(
@@ -457,7 +470,7 @@ function about() {
     { name: 'About', url: '/about/' },
   ];
   const body = `${crumbs(trail)}
-${pageHead('Built by techs, not salespeople.', 'Why this company exists, and what that means for the way we work.')}
+${pageHead('The people who scope it are the people who install it.', 'Why this company was started, and what it changes about how the work gets done.')}
 <section class="sec">
 <div class="wrap split">
 <div class="prose">
