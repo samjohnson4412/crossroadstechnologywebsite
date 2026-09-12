@@ -211,7 +211,7 @@ ${pageHead(
 )}
 ${serviceCategories
   .map(
-    (cat) => `<section class="sec${cat.id === 'security' || cat.id === 'managed' ? ' sec-soft' : ''}">
+    (cat, i) => `<section class="sec${i % 2 ? ' sec-soft' : ''}">
 <div class="wrap">
 ${sectionHead('', esc(cat.label), esc(cat.blurb))}
 <div class="grid g3">${services.filter((sv) => sv.category === cat.id).map(serviceCard).join('')}</div>
@@ -220,7 +220,7 @@ ${sectionHead('', esc(cat.label), esc(cat.blurb))}
   )
   .join('')}
 
-<section class="sec sec-soft">
+<section class="sec${serviceCategories.length % 2 ? ' sec-soft' : ''}">
 <div class="wrap">
 ${sectionHead(
   'Scopes that overlap',

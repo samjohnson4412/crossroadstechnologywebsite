@@ -65,11 +65,12 @@ dist/                 Build output (git-ignored)
 
 - **Phone, email, address, hours** — the `site` object. Change once; it updates
   the header, footer, contact page, and the `LocalBusiness` structured data.
-- **Services** — the `services` array (14 of them). Each entry generates a
+- **Services** — the `services` array (11 of them). Each entry generates a
   page at `/services/<slug>/`, a card on the services index, a footer link, a
   sitemap entry, and `Service` + `FAQPage` schema. `category` places it in one
-  of the `serviceCategories` groups; `featured: true` also shows it on the
-  home page, which carries eight rather than all fourteen.
+  of the four `serviceCategories` groups — Network & Infrastructure, Security
+  Systems, Managed IT & Cloud, Audio Visual, rendered in that order.
+  `featured: true` also shows it on the home page, which carries eight.
 - **Industries** — the `industries` array, same pattern.
 - **Service areas** — the `areas` array, same pattern.
 - **Home page FAQs** — `homeFaqs`. These carry the FAQ rich-result markup.
@@ -85,6 +86,13 @@ Pick `icon` from the keys in `src/ui.js`.
 
 > Write genuinely distinct copy for each page. Near-duplicate service or
 > location pages are treated as thin content and can suppress the whole site.
+
+**Deliberately not services:** carrier offloading, real estate tech and
+green/energy work are discontinued. Office moves, new-location buildouts and
+general residential are not sold as standalone services either — moves and
+buildouts are covered inside the cabling page where they apply, and the only
+residential work taken is home theater, which its own page states plainly so
+it qualifies enquiries rather than inviting the wrong ones.
 
 ---
 
@@ -162,10 +170,6 @@ markup.
       text. A designed 1200×630 card with the logo and tagline will convert
       better when links are shared. Drop it in and the build will keep it if
       you remove the generator call, or just overwrite the file after building.
-- [ ] **Confirm Green-Tech is still offered.** Carrier offloading and real
-      estate tech were removed as dead. Green-Tech & Energy Retrofits was kept
-      because it is still on the live site, but it was not explicitly
-      confirmed — delete that entry from `services` if it is also dormant.
 - [ ] **Swap client wordmarks for logos.** The "Trusted by" strip renders the
       four client names as text. Real logo files would look stronger.
 - [ ] **Add testimonials.** Two real quotes would lift conversion more than

@@ -63,9 +63,8 @@ const credentials = [
 const serviceCategories = [
   { id: 'infrastructure', label: 'Network & Infrastructure', blurb: 'The physical layer everything else depends on — cable, switching, wireless and the circuit coming into the building.' },
   { id: 'security', label: 'Security Systems', blurb: 'Cameras and door access, designed around what you actually need to see and who should be able to get in.' },
-  { id: 'av', label: 'Audio Visual', blurb: 'Rooms that work without a technician standing in them — conference, classroom, sanctuary and theater.' },
   { id: 'managed', label: 'Managed IT & Cloud', blurb: 'The day-to-day: support, accounts, security, point of sale and an honest read on what you already have.' },
-  { id: 'projects', label: 'Projects & Buildouts', blurb: 'Moves, new locations and retrofits — one contractor holding one schedule against your open date.' },
+  { id: 'av', label: 'Audio Visual', blurb: 'Rooms that work without a technician standing in them — conference, classroom, sanctuary and theater.' },
 ];
 
 /**
@@ -221,7 +220,7 @@ const services = [
       },
       {
         h: 'New construction and retail buildouts',
-        p: 'We work from plans and coordinate with the GC and other trades on rough-in and trim schedules. We have delivered low-voltage scopes for retail store builds in the Tampa and Orlando markets, including brand-specified cable categories, certification requirements and closeout packages.',
+        p: 'We work from plans and coordinate with the GC and other trades on rough-in and trim schedules. We have delivered low-voltage scopes for retail store builds in the Tampa and Orlando markets, including brand-specified cable categories, certification requirements and closeout packages. The same applies to office relocations and new locations: if you are moving or opening, we take the whole technology scope and sequence it against your open date.',
       },
       {
         h: 'Cleanups and remediation',
@@ -242,7 +241,7 @@ const services = [
         a: 'Cat6 handles gigabit everywhere and 10 gigabit over short runs, and it is the right answer for most offices. Cat6A is worth it for long runs, high-density wireless backhaul and anywhere you expect 10 gigabit to the desk. We will tell you which one your building actually needs.',
       },
     ],
-    related: ['networking-wifi', 'security-cameras', 'office-moves'],
+    related: ['networking-wifi', 'security-cameras', 'access-control'],
   },
   {
     slug: 'security-cameras',
@@ -449,59 +448,12 @@ const services = [
         a: 'Yes. Number porting is a standard part of a phone system migration. We manage the port paperwork and schedule the cutover so the numbers move without a gap in service.',
       },
     ],
-    related: ['networking-wifi', 'managed-it-services', 'office-moves'],
-  },
-  {
-    slug: 'office-moves',
-    category: 'projects',
-    featured: true,
-    nav: 'Office Moves',
-    title: 'Office Moves & New Build Technology',
-    h1: 'Office Move & New Build Technology Services',
-    metaTitle: 'Office Move IT & New Build Technology | Tampa Bay',
-    metaDescription:
-      'Moving offices or opening a new location in Tampa Bay? One contractor for cabling, network, internet, phones, cameras and AV — planned so you open on schedule.',
-    blurb:
-      'One contractor for the whole technology scope of a move or a new location — cabling, network, internet, phones, cameras and AV, sequenced to your open date.',
-    icon: 'move',
-    keywords: 'office move IT Tampa, new office technology setup, business relocation IT',
-    intro:
-      'An office move is where fragmented IT vendors become expensive. The cabling contractor finishes late, the carrier install was never scheduled, the phone port fails on cutover day, and everyone points at someone else. We take the whole technology scope so there is one schedule and one person accountable for the open date.',
-    body: [
-      {
-        h: 'Working backward from your open date',
-        p: 'Carrier installs are the long pole — a fiber build can run sixty days or more. We start there and schedule everything else against it: cabling at rough-in, rack and network before furniture, cameras and AV at trim, cutover the weekend before you open.',
-        list: [
-          'Site walkthrough and technology plan for the new space',
-          'Structured cabling designed to the furniture and floor plan',
-          'Internet circuit sourced and installation scheduled early',
-          'Rack, network and Wi-Fi built and tested before move-in',
-          'Phone system move and number port managed end to end',
-          'Cameras, access control and AV installed at trim',
-          'Workstation, printer and server relocation over a weekend',
-          'Decommissioning and documentation at the old site',
-        ],
-      },
-      {
-        h: 'Storage, servers and data',
-        p: 'Moving a server or NAS is the riskiest hour of a relocation. We back up first, verify the backup, move it, and confirm services are up before anyone tries to work Monday morning. Where a move is a good moment to retire aging on-premises hardware, we will say so and price both paths.',
-      },
-    ],
-    faqs: [
-      {
-        q: 'How far in advance should we start planning an office move?',
-        a: 'Reach out as soon as you have a signed lease. Internet circuits are the constraint — a fiber build can take sixty days or more — and cabling has to happen before walls close. Sixty to ninety days is comfortable; less is workable but limits your carrier options.',
-      },
-      {
-        q: 'Can you work nights and weekends for the cutover?',
-        a: 'Yes, and we usually do. Physical moves and cutovers are scheduled outside business hours so your staff arrives to a working office.',
-      },
-    ],
-    related: ['structured-cabling', 'internet-phone-systems', 'networking-wifi'],
+    related: ['networking-wifi', 'managed-it-services', 'microsoft-365'],
   },
   {
     slug: 'access-control',
     category: 'security',
+    featured: true,
     nav: 'Access Control',
     title: 'Access Control & Entry Systems',
     h1: 'Access Control & Door Entry Installation',
@@ -599,7 +551,7 @@ const services = [
         a: 'Yes, provided the internet circuit is ordered early enough — that is the long lead item. Bring us in when the lease is signed and we sequence cabling, network and terminals against your opening date.',
       },
     ],
-    related: ['networking-wifi', 'internet-phone-systems', 'new-business-setup'],
+    related: ['networking-wifi', 'internet-phone-systems', 'managed-it-services'],
   },
   {
     slug: 'home-theater',
@@ -701,104 +653,6 @@ const services = [
     ],
     related: ['managed-it-services', 'networking-wifi', 'microsoft-365'],
   },
-  {
-    slug: 'new-business-setup',
-    category: 'projects',
-    nav: 'New Business Setup',
-    title: 'New Business Technology Setup',
-    h1: 'Technology Setup for New Businesses',
-    metaTitle: 'New Business IT Setup Tampa | Crossroads Technology',
-    metaDescription:
-      'Opening in Tampa Bay? One contractor for internet, cabling, network, phones, email, cameras and point of sale, sequenced backward from your opening date.',
-    blurb:
-      'Opening a location? Internet, cabling, network, phones, email, cameras and point of sale, sequenced backward from your open date.',
-    icon: 'rocket',
-    keywords: 'new business IT setup Tampa, startup technology setup, new office technology',
-    intro:
-      'Opening a business involves roughly forty decisions about technology, and the order matters more than the choices. First-time owners usually discover this when the internet cannot be installed for six weeks and the doors open on Monday. We work the list backward from your open date so nothing becomes an emergency.',
-    body: [
-      {
-        h: 'The order things have to happen in',
-        p: 'Internet first, because a fiber build can run sixty days or more and nothing else can be tested without it. Cabling next, before the walls close. Then the rack, network and wireless, before furniture arrives. Phones, cameras and point of sale at trim. Accounts and email can happen in parallel at any point.',
-      },
-      {
-        h: 'What we set up',
-        list: [
-          'Internet circuit sourcing, ordering and install coordination',
-          'Structured cabling to every desk, register and device location',
-          'Rack, firewall, switching and business wireless',
-          'Business phone system and number porting or new numbers',
-          'Microsoft 365 or Google Workspace, domain, email and shared files',
-          'Security cameras and door access',
-          'Point-of-sale terminals and payment connectivity',
-          'Workstations, printers and the day-one setup for your staff',
-        ],
-      },
-      {
-        h: 'Sized to a real budget',
-        p: 'A new business does not need enterprise equipment, and we will not quote it. We specify gear that fits the size you are now with room for the size you expect to be, and we tell you plainly which items can be deferred to year two without painting you into a corner.',
-      },
-    ],
-    faqs: [
-      {
-        q: 'When should we contact you?',
-        a: 'As soon as the lease is signed. The internet circuit is the constraint and everything else schedules around it. Sixty to ninety days is comfortable. Less is workable but it narrows your carrier options and raises the cost.',
-      },
-      {
-        q: 'Can you work from our build-out drawings?',
-        a: 'Yes. Send the floor plan and we will mark up cable drops, equipment locations and the rack, then coordinate rough-in and trim with your general contractor.',
-      },
-    ],
-    related: ['office-moves', 'internet-phone-systems', 'point-of-sale'],
-  },
-  {
-    slug: 'green-tech',
-    category: 'projects',
-    nav: 'Energy Retrofits',
-    title: 'Green-Tech & Energy Retrofits',
-    h1: 'Commercial LED & Smart Building Retrofits',
-    metaTitle: 'LED & Smart Building Retrofits Tampa | Crossroads Technology',
-    metaDescription:
-      'Commercial LED lighting retrofits and smart building controls in Tampa Bay. Energy work with a measurable payback, installed by the contractor already on site.',
-    blurb:
-      'LED retrofits, smart thermostats and building controls — energy work with a payback you can calculate, done while we are already on site.',
-    icon: 'leaf',
-    keywords: 'commercial LED retrofit Tampa, smart thermostat installation, building controls',
-    intro:
-      'Lighting and cooling are the two largest controllable line items on a Florida commercial power bill. Both respond well to equipment that is cheap relative to what it saves. This is not a separate green initiative; it is low-voltage work we are already qualified to do, usually completed during a project we are on site for anyway.',
-    body: [
-      {
-        h: 'What we install',
-        list: [
-          'LED fixture and lamp retrofits for offices, warehouses and retail',
-          'Occupancy, vacancy and daylight sensors',
-          'Smart thermostats and zoned scheduling',
-          'Networked lighting control with schedules and scenes',
-          'Exterior and parking LED with photocell and timer control',
-          'Submetering so you can see where the consumption actually is',
-        ],
-      },
-      {
-        h: 'Payback, calculated from your bill',
-        p: 'We will not quote a savings percentage from a brochure. We count the fixtures, note the run hours, take your actual rate from a recent bill, and give you the arithmetic. Some rooms pay back in under two years and some are not worth touching. You get both answers.',
-      },
-      {
-        h: 'Cheapest while we are already there',
-        p: 'Lift time and labour mobilisation are a real share of the cost of this work. If we are already in the ceiling running cable or mounting access points, adding a lighting retrofit to the same visit costs materially less than bringing a crew back for it later.',
-      },
-    ],
-    faqs: [
-      {
-        q: 'Do you handle utility rebates?',
-        a: 'We will identify what your utility currently offers for commercial lighting and controls, and provide the fixture schedules and documentation those programs ask for. Rebate programs change often, so we confirm what is live at the time of the quote rather than promising a figure.',
-      },
-      {
-        q: 'Is this worth doing on a leased space?',
-        a: 'It depends on the term remaining and who pays the power bill. If you hold the meter and have three or more years left, usually yes. We will run the numbers before you commit, and tell you if the answer is no.',
-      },
-    ],
-    related: ['office-moves', 'structured-cabling', 'new-business-setup'],
-  },
 ];
 
 /** Industry pages — grounded in the verticals we actually serve. */
@@ -888,7 +742,7 @@ const industries = [
         a: 'Yes. Hybrid setups are common in professional offices, and often the right answer — fast local access to large document sets with cloud replication for off-site protection and remote work.',
       },
     ],
-    services: ['managed-it-services', 'microsoft-365', 'office-moves', 'internet-phone-systems'],
+    services: ['managed-it-services', 'microsoft-365', 'internet-phone-systems', 'technology-audits'],
   },
   {
     slug: 'retail-construction',
@@ -918,7 +772,7 @@ const industries = [
         a: 'Yes. We carry general liability and workers compensation coverage, and we provide certificates naming the GC as required before mobilizing.',
       },
     ],
-    services: ['structured-cabling', 'security-cameras', 'networking-wifi', 'office-moves'],
+    services: ['structured-cabling', 'security-cameras', 'access-control', 'networking-wifi'],
   },
 ];
 
