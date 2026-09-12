@@ -19,6 +19,19 @@ const { site, legacyRedirects } = require('./src/data');
 const { render } = require('./src/layout');
 const { allPages } = require('./src/pages');
 
+/**
+ * Which branch built this. Cloudflare Workers Builds sets WORKERS_CI_BRANCH;
+ * Pages sets CF_PAGES_BRANCH. Empty locally.
+ *
+ * A preview deployment serves the whole site on a public URL. Left alone it
+ * could be crawled and compete with the real domain, so preview builds are
+ * marked noindex. Production output is untouched.
+ */
+const PRODUCTION_BRANCH = 'main';
+const BUILD_BRANCH =
+  process.env.WORKERS_CI_BRANCH || process.env.CF_PAGES_BRANCH || process.env.BRANCH || '';
+const IS_PREVIEW = BUILD_BRANCH !== '' && BUILD_BRANCH !== PRODUCTION_BRANCH;
+
 const ROOT = __dirname;
 const SRC = path.join(ROOT, 'src');
 const DIST = path.join(ROOT, 'dist');
@@ -323,7 +336,9 @@ function build() {
 
   write(
     'robots.txt',
-    `User-agent: *\nAllow: /\n\nSitemap: ${site.origin}/sitemap.xml\n`
+    IS_PREVIEW
+      ? `# Preview build of branch "${BUILD_BRANCH}" — not for indexing.\nUser-agent: *\nDisallow: /\n`
+      : `User-agent: *\nAllow: /\n\nSitemap: ${site.origin}/sitemap.xml\n`
   );
 
   // Cloudflare Pages / Netlify headers: long cache on immutable assets,
@@ -331,7 +346,7 @@ function build() {
   write(
     '_headers',
     `/*
-  X-Content-Type-Options: nosniff
+${IS_PREVIEW ? '  X-Robots-Tag: noindex, nofollow\n' : ''}  X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=()
@@ -430,6 +445,11 @@ AddType application/manifest+json .webmanifest
   console.log(`  stylesheet       ${kb(cssBytes)}`);
   console.log(`  og image         ${kb(ogBytes)}`);
   console.log(`  largest page     ${largest.path} (${kb(largest.size)})`);
+  console.log(
+    `  build           ${
+      BUILD_BRANCH ? `branch "${BUILD_BRANCH}"` : 'local'
+    }${IS_PREVIEW ? '  (PREVIEW — marked noindex)' : ''}`
+  );
   console.log(`  host configs     _headers, _redirects, .htaccess`);
   console.log(`  client logos     ${logoCount || 'none supplied — names render as text'}`);
   console.log(`  output           dist/\n`);
