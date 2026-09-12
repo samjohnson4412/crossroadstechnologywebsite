@@ -103,11 +103,24 @@ use `--cyan` on dark. All rendered text has been checked at 4.5:1 or better.
 
 The output is plain static files. Any host works.
 
-**Cloudflare Pages / Netlify:**
+**Cloudflare Workers** (the current default for new static sites):
+
+- Build command: `node build.js`
+- Deploy command: `npx wrangler deploy`
+- No environment variables needed
+
+`wrangler.jsonc` in the repo root points Workers at `dist/` and serves
+`404.html` for unknown paths. There is no Worker script — it is a static
+asset deployment.
+
+**Cloudflare Pages / Netlify** (if you use the older Pages flow instead):
 
 - Build command: `node build.js`
 - Output directory: `dist`
 - No environment variables needed
+- Cloudflare Pages additionally wants `pages_build_output_dir = "dist"` in a
+  `wrangler.toml`; the Workers-style `wrangler.jsonc` here is not valid for a
+  Pages project, so delete it if you go that route.
 
 `dist/_headers` sets cache and security headers, and `dist/_redirects`
 preserves the old `/privacy.html` and `/returns.html` URLs. Both files are read
