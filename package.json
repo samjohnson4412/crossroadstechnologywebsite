@@ -11,6 +11,7 @@
     "build": "node build.js",
     "validate": "node build.js && node validate.js",
     "serve": "npx --yes http-server dist -p 8080 -c-1",
-    "dev": "node build.js && npx --yes http-server dist -p 8080 -c-1"
+    "dev": "node build.js && npx --yes http-server dist -p 8080 -c-1",
+    "deploy": "./deploy.sh"
   }
 }

@@ -46,6 +46,7 @@ Home page: **~9 KB gzipped HTML + 5 KB CSS.** Interior pages are around 6 KB.
 ```
 build.js              Generator: writes dist/, icons, OG image, sitemap, robots
 validate.js           Post-build checks (run this before every deploy)
+deploy.sh             Build, validate, rsync to DreamHost or any SSH host
 src/
   data.js             ALL business facts and page content  <- edit this
   pages.js            Page templates (home, service, industry, area, legal)
@@ -153,6 +154,36 @@ The output is plain static files. Any host works.
 `404.html` for unknown paths. There is no Worker script — it is a static
 asset deployment.
 
+**DreamHost** (or any Apache shared host, over SSH):
+
+```bash
+export DEPLOY_TARGET='username@server.dreamhost.com:~/crossroadstechnology.co/'
+./deploy.sh
+```
+
+`deploy.sh` rebuilds, runs the validator, and rsyncs `dist/` up. A failing
+check aborts the deploy rather than publishing a broken page. Add `--prune`
+to also delete remote files this build no longer produces — it asks first,
+and refuses obviously wrong targets like a bare home directory.
+
+Find the server hostname under **Websites** in the DreamHost panel, and the
+SSH username under **Servers → Manage Users**. The site directory is normally
+`~/yourdomain.com/`.
+
+No SSH? Upload the **contents** of `dist/` (not the folder) to that directory
+over SFTP, including the hidden `.htaccess`.
+
+The build writes `dist/.htaccess` for Apache hosts, covering the same ground
+as the Cloudflare files: HTTPS and non-www canonicalisation, the legacy
+`/privacy.html` and `/returns.html` redirects, `404.html`, long cache lifetimes
+on assets with no caching on HTML, gzip, and the security headers. It is
+generated from `site.origin`, so changing the domain updates it. The
+canonical-host rules are scoped to the live domain, so deploying to a
+DreamHost staging subdomain first will not bounce you to production.
+
+Two DreamHost settings worth checking in the panel: turn on **Let's Encrypt**
+for the domain, and leave **Passenger** off — this is static HTML, not an app.
+
 **Cloudflare Pages / Netlify** (if you use the older Pages flow instead):
 
 - Build command: `node build.js`
@@ -162,10 +193,10 @@ asset deployment.
   `wrangler.toml`; the Workers-style `wrangler.jsonc` here is not valid for a
   Pages project, so delete it if you go that route.
 
-`dist/_headers` sets cache and security headers, and `dist/_redirects`
-preserves the old `/privacy.html` and `/returns.html` URLs. Both files are read
-automatically by Cloudflare Pages and Netlify. On another host, port those
-rules to its equivalent config.
+`dist/_headers` and `dist/_redirects` are the Cloudflare and Netlify formats;
+`dist/.htaccess` is the Apache equivalent. All three are generated from the
+same config, so they stay in agreement. Hosts ignore the ones that are not
+theirs, so shipping all three is harmless.
 
 Run `node validate.js` before deploying. It fails the build on broken internal
 links, duplicate titles, missing canonicals, malformed JSON-LD and unescaped

@@ -65,6 +65,7 @@ const clients = [
 const credentials = [
   { label: 'Microsoft', detail: 'Microsoft 365, Windows and tenant security' },
   { label: 'Google', detail: 'Workspace, Chromebooks and Classroom' },
+  { label: 'Cisco', detail: 'Switching, routing and network security' },
   { label: 'Zoom', detail: 'Meetings, phone and conference rooms' },
   { label: 'Adobe', detail: 'Creative Cloud licensing and deployment' },
   { label: 'HPE', detail: 'Servers, storage and Aruba networking' },
