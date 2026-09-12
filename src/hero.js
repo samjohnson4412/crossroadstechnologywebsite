@@ -15,7 +15,7 @@ const W = 820;
 const H = 720;
 
 const rad = (d) => (d * Math.PI) / 180;
-const r2 = (n) => Math.round(n * 100) / 100;
+const r2 = (n) => Math.round(n * 10) / 10;
 
 /* ---------------------------------------------------------------- isometric */
 
@@ -66,8 +66,8 @@ function dome(R, tiltDeg, cx, cy) {
   for (let m = 0; m < meridians; m++) {
     const theta = (m / meridians) * Math.PI * 2;
     const path = [];
-    for (let s = 0; s <= 26; s++) {
-      const lat = (s / 26) * rad(CAP);
+    for (let s = 0; s <= 18; s++) {
+      const lat = (s / 18) * rad(CAP);
       const rr = R * Math.cos(lat);
       path.push({
         x: cx + rr * Math.cos(theta),

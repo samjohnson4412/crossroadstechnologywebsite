@@ -1,6 +1,6 @@
 'use strict';
 
-const { site, credentials, clients, services, industries, areas, homeFaqs, pillars, process } = require('./data');
+const { site, credentials, clients, serviceCategories, services, industries, areas, homeFaqs, pillars, process } = require('./data');
 const { icon, esc, faqList, sectionHead, ctaBand, crumbs } = require('./ui');
 const { heroGraphic } = require('./hero');
 
@@ -88,7 +88,8 @@ ${sectionHead(
   'Most businesses end up with four vendors who each blame the other three. We handle the network, the cable in the walls, the cameras, the screens and the cloud accounts &mdash; so there is one number to call and one company accountable.',
   'center'
 )}
-<div class="grid g4">${services.map(serviceCard).join('')}</div>
+<div class="grid g4">${services.filter((s) => s.featured).map(serviceCard).join('')}</div>
+<p class="sec-more"><a href="/services/">See all ${services.length} services ${icon('arrow')}</a></p>
 </div>
 </section>
 
@@ -190,7 +191,7 @@ ${ctaBand(
     top: 'home',
     metaTitle: 'Managed IT, Cabling & AV in Tampa Bay | Crossroads Technology',
     metaDescription:
-      'Tampa Bay managed IT and low-voltage contractor. Networking, cabling, security cameras, AV and Microsoft 365 from one team. Built by techs, not salespeople.',
+      'Tampa Bay managed IT and low-voltage contractor. Networking, structured cabling, security cameras, AV and Microsoft 365 from one accountable team.',
     faqs: homeFaqs,
     body,
   };
@@ -208,11 +209,16 @@ ${pageHead(
   'Technology Services for Tampa Bay Businesses',
   'Managed IT, networking, cabling, cameras, AV and cloud — delivered by one contractor so nothing falls between vendors.'
 )}
-<section class="sec">
+${serviceCategories
+  .map(
+    (cat) => `<section class="sec${cat.id === 'security' || cat.id === 'managed' ? ' sec-soft' : ''}">
 <div class="wrap">
-<div class="grid g3">${services.map(serviceCard).join('')}</div>
+${sectionHead('', esc(cat.label), esc(cat.blurb))}
+<div class="grid g3">${services.filter((sv) => sv.category === cat.id).map(serviceCard).join('')}</div>
 </div>
-</section>
+</section>`
+  )
+  .join('')}
 
 <section class="sec sec-soft">
 <div class="wrap">

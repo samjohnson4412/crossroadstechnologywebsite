@@ -58,12 +58,25 @@ const credentials = [
 ];
 
 /**
+ * Service groupings. Order here is the order they appear on the services index.
+ */
+const serviceCategories = [
+  { id: 'infrastructure', label: 'Network & Infrastructure', blurb: 'The physical layer everything else depends on — cable, switching, wireless and the circuit coming into the building.' },
+  { id: 'security', label: 'Security Systems', blurb: 'Cameras and door access, designed around what you actually need to see and who should be able to get in.' },
+  { id: 'av', label: 'Audio Visual', blurb: 'Rooms that work without a technician standing in them — conference, classroom, sanctuary and theater.' },
+  { id: 'managed', label: 'Managed IT & Cloud', blurb: 'The day-to-day: support, accounts, security, point of sale and an honest read on what you already have.' },
+  { id: 'projects', label: 'Projects & Buildouts', blurb: 'Moves, new locations and retrofits — one contractor holding one schedule against your open date.' },
+];
+
+/**
  * Core services. Each becomes a page at /services/<slug>/ and is linked from
  * the home page, the services index, and the relevant industry/area pages.
  */
 const services = [
   {
     slug: 'managed-it-services',
+    category: 'managed',
+    featured: true,
     nav: 'Managed IT',
     title: 'Managed IT Services',
     h1: 'Managed IT Services in Tampa Bay',
@@ -122,6 +135,8 @@ const services = [
   },
   {
     slug: 'networking-wifi',
+    category: 'infrastructure',
+    featured: true,
     nav: 'Networking & Wi-Fi',
     title: 'Business Networking & Wi-Fi',
     h1: 'Business Networking & Wi-Fi Installation',
@@ -172,6 +187,8 @@ const services = [
   },
   {
     slug: 'structured-cabling',
+    category: 'infrastructure',
+    featured: true,
     nav: 'Structured Cabling',
     title: 'Structured Cabling & Low-Voltage',
     h1: 'Structured Cabling & Low-Voltage Installation',
@@ -229,14 +246,16 @@ const services = [
   },
   {
     slug: 'security-cameras',
+    category: 'security',
+    featured: true,
     nav: 'Security Cameras',
-    title: 'Security Cameras & Access Control',
-    h1: 'Security Camera Installation & Access Control',
+    title: 'Security Cameras & Surveillance',
+    h1: 'Security Camera Installation in Tampa Bay',
     metaTitle: 'Security Camera Installation Tampa Bay | Crossroads Technology',
     metaDescription:
       'Commercial security camera and access control installation in Tampa Bay. IP cameras, NVR storage, remote viewing and door access, installed by techs.',
     blurb:
-      'IP camera systems that actually produce usable footage, plus door access control — installed, aimed, configured and supported.',
+      'IP camera systems that produce footage you can actually use — designed around the shot you need, then aimed, secured and supported.',
     icon: 'camera',
     keywords: 'security camera installation Tampa, commercial CCTV Tampa, access control Tampa Bay',
     intro:
@@ -251,8 +270,7 @@ const services = [
           'Low-light and infrared coverage for parking and perimeter',
           'Retention sizing so footage lasts as long as your policy requires',
           'Remote viewing on desktop and mobile, secured properly',
-          'Door access control, keypads, fobs and door position monitoring',
-          'Intercom and video doorbell entry for schools and offices',
+          'Entry-point coverage integrated with door access control',
           'Clip export and retrieval support when you need a specific incident',
         ],
       },
@@ -276,13 +294,15 @@ const services = [
       },
       {
         q: 'Do you support access control as well as cameras?',
-        a: 'Yes. We install and support door access control — keypads, fobs, strikes and door position monitoring — and integrate it with camera coverage at entry points.',
+        a: 'Yes, and we integrate the two so an entry event and the footage of it line up. Door hardware, credentials and entry systems are covered on our access control page.',
       },
     ],
-    related: ['structured-cabling', 'networking-wifi', 'managed-it-services'],
+    related: ['access-control', 'structured-cabling', 'networking-wifi'],
   },
   {
     slug: 'audio-visual',
+    category: 'av',
+    featured: true,
     nav: 'Audio Visual',
     title: 'Audio Visual & Conference Rooms',
     h1: 'Audio Visual Installation for Business & Worship',
@@ -326,10 +346,12 @@ const services = [
         a: 'Yes, including mounting, network setup, account integration with Google Workspace or Microsoft 365, and teacher training so the displays get used rather than sitting dark.',
       },
     ],
-    related: ['structured-cabling', 'networking-wifi', 'microsoft-365'],
+    related: ['home-theater', 'structured-cabling', 'networking-wifi'],
   },
   {
     slug: 'microsoft-365',
+    category: 'managed',
+    featured: true,
     nav: 'Microsoft 365',
     title: 'Microsoft 365 & Google Workspace',
     h1: 'Microsoft 365 & Google Workspace Support',
@@ -381,6 +403,8 @@ const services = [
   },
   {
     slug: 'internet-phone-systems',
+    category: 'infrastructure',
+    featured: true,
     nav: 'Internet & Phones',
     title: 'Internet, Phones & Vendor Management',
     h1: 'Business Internet, Phone Systems & Vendor Management',
@@ -429,6 +453,8 @@ const services = [
   },
   {
     slug: 'office-moves',
+    category: 'projects',
+    featured: true,
     nav: 'Office Moves',
     title: 'Office Moves & New Build Technology',
     h1: 'Office Move & New Build Technology Services',
@@ -472,6 +498,306 @@ const services = [
       },
     ],
     related: ['structured-cabling', 'internet-phone-systems', 'networking-wifi'],
+  },
+  {
+    slug: 'access-control',
+    category: 'security',
+    nav: 'Access Control',
+    title: 'Access Control & Entry Systems',
+    h1: 'Access Control & Door Entry Installation',
+    metaTitle: 'Access Control Installation Tampa | Crossroads Technology',
+    metaDescription:
+      'Commercial access control and door entry in Tampa Bay. Keypads, fobs, mobile credentials, electric strikes and intercoms, installed, integrated and supported.',
+    blurb:
+      'Keypads, fobs, mobile credentials and intercoms — so you stop rekeying the building every time somebody leaves.',
+    icon: 'door',
+    keywords: 'access control Tampa, door entry systems, keyless entry commercial',
+    intro:
+      'Keys are the problem. They get copied, they walk out with departing staff, and the only fix is rekeying the building. Access control replaces that with credentials you can switch off in ten seconds, and a record of who opened which door and when.',
+    body: [
+      {
+        h: 'What we install',
+        list: [
+          'Keypads, card and fob readers, and mobile credentials',
+          'Electric strikes, maglocks and request-to-exit hardware',
+          'Video intercoms and door stations for staffed entries',
+          'Door position and forced-entry monitoring',
+          'Schedules, so exterior doors unlock and lock themselves',
+          'Cloud-managed platforms you can administer from a phone',
+          'Integration with existing camera systems at entry points',
+        ],
+      },
+      {
+        h: 'Doors are life safety, not just hardware',
+        p: 'A locked door has to release on the way out, every time, including when the power fails and when the fire alarm goes. That is code, and it is the part unlicensed installers get wrong. We work to egress and fire code requirements, and we coordinate with your alarm vendor where the systems have to talk.',
+      },
+      {
+        h: 'Tied to the cameras',
+        p: 'Access events and camera footage are far more useful together than apart. When a door opens at 2am, you want the credential that opened it and the video of it in the same place. We install both, so the timestamps line up and there is one system to review rather than two.',
+      },
+      {
+        h: 'Schools and offices with front-door control',
+        p: 'For a school or a professional office, the common requirement is simple: the front door stays locked, a visitor presses a button, someone in the office sees and hears them, and releases the door from a desk. That is a video intercom tied to a strike, and it is one of the most cost-effective security upgrades available.',
+      },
+    ],
+    faqs: [
+      {
+        q: 'Can we keep our existing doors and hardware?',
+        a: 'Usually. Most commercial doors and frames accept an electric strike without replacement. We survey each opening first, because the door, frame and existing lockset decide what hardware fits and whether anything needs modification.',
+      },
+      {
+        q: 'What happens to the doors in a power outage?',
+        a: 'They release. Egress is never dependent on power in a properly installed system, and we specify fail-safe or fail-secure hardware per opening according to code and what that door is for.',
+      },
+    ],
+    related: ['security-cameras', 'structured-cabling', 'managed-it-services'],
+  },
+  {
+    slug: 'point-of-sale',
+    category: 'managed',
+    nav: 'Point of Sale',
+    title: 'Point-of-Sale Systems',
+    h1: 'Point-of-Sale Setup & Support',
+    metaTitle: 'POS System Setup & Support Tampa | Crossroads Technology',
+    metaDescription:
+      'Point-of-sale installation and support for Tampa Bay restaurants and retail. Toast and similar platforms, plus the network, cabling and payment path behind them.',
+    blurb:
+      'Toast and similar platforms — plus the network, cabling and payment path that actually decides whether the terminal works.',
+    icon: 'card',
+    keywords: 'POS installation Tampa, Toast POS support, restaurant technology Tampa',
+    intro:
+      'When a point-of-sale system goes down mid-service, the cause is almost never the point-of-sale system. It is the network, the switch it is plugged into, the access point the handheld roams to, or the circuit. We install and support the terminals, and we own everything underneath them too, which is why the problem gets fixed instead of escalated.',
+    body: [
+      {
+        h: 'What we handle',
+        list: [
+          'Terminal, kitchen display and receipt printer installation',
+          'Toast and comparable restaurant and retail platforms',
+          'Handheld and tableside ordering device deployment',
+          'Cabling and power for every station and printer location',
+          'Dedicated wireless coverage for handhelds across the floor',
+          'Payment terminal connectivity and card reader setup',
+          'Failover internet so an outage does not stop you taking cards',
+        ],
+      },
+      {
+        h: 'The network is the point-of-sale system',
+        p: 'Handhelds that drop orders in the back of the dining room are a wireless coverage problem. Terminals that freeze at the dinner rush are usually a switch or a saturated circuit. We design coverage for the floor plan you actually have, put the point-of-sale traffic on its own segment, and give payment devices a clean path out.',
+      },
+      {
+        h: 'Card data and segmentation',
+        p: 'Payment devices should not share a network with the guest Wi-Fi, the cameras or the office computer. We separate them, which is both good practice and the thing that keeps your PCI questionnaire honest. We are happy to work alongside your processor and document the setup.',
+      },
+    ],
+    faqs: [
+      {
+        q: 'Do you support systems we bought directly from the vendor?',
+        a: 'Yes. Most restaurants buy the platform from the provider and then discover nobody owns the network it runs on. That is the part we take, and we will work the vendor support line with you when the fault genuinely is the platform.',
+      },
+      {
+        q: 'Can you get us running before opening day?',
+        a: 'Yes, provided the internet circuit is ordered early enough — that is the long lead item. Bring us in when the lease is signed and we sequence cabling, network and terminals against your opening date.',
+      },
+    ],
+    related: ['networking-wifi', 'internet-phone-systems', 'new-business-setup'],
+  },
+  {
+    slug: 'home-theater',
+    category: 'av',
+    nav: 'Home Theater',
+    title: 'Home Theater & Media Rooms',
+    h1: 'Home Theater & Media Room Installation',
+    metaTitle: 'Home Theater Installation Tampa | Crossroads Technology',
+    metaDescription:
+      'Home theater and media room design and installation in Tampa Bay. Projection, displays, surround sound, acoustics and single-remote control, wired properly.',
+    blurb:
+      'Projection, surround sound, acoustic treatment and one remote that works. The one residential project we still take.',
+    icon: 'theater',
+    keywords: 'home theater installation Tampa, media room design, surround sound installation',
+    intro:
+      'Crossroads Technology is a business-to-business contractor, and we no longer take general residential work. Home theater is the exception, because it is the same discipline as the commercial AV we do every week: signal paths, acoustics, cable planned before the drywall, and control simple enough that nobody needs instructions.',
+    body: [
+      {
+        h: 'What a room needs to actually work',
+        list: [
+          'Projection and screen, or a large-format display, sized to the seating distance',
+          'Surround processing and amplification matched to the room, not to a box on a shelf',
+          'In-wall, in-ceiling and floor-standing speaker placement',
+          'Acoustic treatment where the room needs it, which is most rooms',
+          'Equipment rack with proper ventilation and clean cable management',
+          'Lighting control and motorised shades',
+          'One remote, or one app, that turns the whole room on',
+        ],
+      },
+      {
+        h: 'Cable first, equipment second',
+        p: 'The decisions that are expensive to reverse are the ones behind the wall. Speaker placement, conduit for future cable, where the rack lives and how it breathes, where the projector power and signal run. If the room is being built or renovated, bring us in before the drywall goes up and the rest becomes straightforward.',
+      },
+      {
+        h: 'Control that a guest can operate',
+        p: 'A theater that needs a cheat sheet is a theater nobody uses. We program a single interface where one button starts the room, and we label and document the rack so any technician can work on it later.',
+      },
+    ],
+    faqs: [
+      {
+        q: 'Do you take other residential work?',
+        a: 'No. We moved away from general residential to focus on business clients. Home theater and dedicated media rooms are the one residential category we still take, because it draws on the same commercial AV skill set.',
+      },
+      {
+        q: 'Can you work with our builder or renovation contractor?',
+        a: 'Yes, and that is the ideal time to involve us. We coordinate rough-in with the builder so the cable, conduit, power and mounting backing are all in place before the walls close.',
+      },
+    ],
+    related: ['audio-visual', 'networking-wifi', 'structured-cabling'],
+  },
+  {
+    slug: 'technology-audits',
+    category: 'managed',
+    nav: 'Technology Audits',
+    title: 'Technology Audits & System Reviews',
+    h1: 'Technology Audits & System Reviews',
+    metaTitle: 'Technology Audit Services Tampa | Crossroads Technology',
+    metaDescription:
+      'Independent technology audits for Tampa Bay businesses. We document what you have, find the risks and bottlenecks, and hand you a prioritised plan that is yours.',
+    blurb:
+      'We document what you actually have, find the risks and the bottlenecks, and hand you a prioritised plan that is yours to keep.',
+    icon: 'audit',
+    keywords: 'technology audit Tampa, IT assessment, network assessment Tampa',
+    intro:
+      'Most organisations cannot answer basic questions about their own systems: what is in the closet, who has administrator access, when the firewall was last updated, whether the backup has ever been restored. An audit answers them in writing. It is also the honest way to find out whether you are being well served by whoever supports you now.',
+    body: [
+      {
+        h: 'What the audit covers',
+        list: [
+          'Network hardware inventory, firmware levels and support status',
+          'Cabling and closet condition, with photographs',
+          'Wireless coverage measured across the building',
+          'Firewall configuration, open ports and remote access paths',
+          'Accounts and administrator access, including former staff',
+          'Backup configuration and a live restore test',
+          'Microsoft 365 or Google Workspace security posture and licensing waste',
+          'Camera coverage, retention and recorder exposure',
+          'Circuits, contracts and renewal dates',
+        ],
+      },
+      {
+        h: 'What you receive',
+        p: 'A written report with network diagrams, a labelled asset inventory, photographs of every closet, and a findings list ranked by risk and by cost to fix. Everything is in plain language, with the technical detail in an appendix for whoever needs it. The document is yours regardless of what you do next.',
+      },
+      {
+        h: 'No obligation attached',
+        p: 'An audit is a fixed-fee engagement, not a sales call with a clipboard. Some clients hand the report to their existing provider and ask them to work through it. That is a perfectly good outcome, and we would rather be the people who told you the truth than the people who used it as leverage.',
+      },
+    ],
+    faqs: [
+      {
+        q: 'Will an audit disrupt our operations?',
+        a: 'Very little. Most of it is inspection, documentation and read-only configuration review. The one item we schedule carefully is the backup restore test, and that runs to isolated hardware rather than over anything live.',
+      },
+      {
+        q: 'Do we have to switch providers afterward?',
+        a: 'No. The report is yours to use however you want, including handing it to your current provider as a work list. We quote remediation separately only if you ask for it.',
+      },
+    ],
+    related: ['managed-it-services', 'networking-wifi', 'microsoft-365'],
+  },
+  {
+    slug: 'new-business-setup',
+    category: 'projects',
+    nav: 'New Business Setup',
+    title: 'New Business Technology Setup',
+    h1: 'Technology Setup for New Businesses',
+    metaTitle: 'New Business IT Setup Tampa | Crossroads Technology',
+    metaDescription:
+      'Opening in Tampa Bay? One contractor for internet, cabling, network, phones, email, cameras and point of sale, sequenced backward from your opening date.',
+    blurb:
+      'Opening a location? Internet, cabling, network, phones, email, cameras and point of sale, sequenced backward from your open date.',
+    icon: 'rocket',
+    keywords: 'new business IT setup Tampa, startup technology setup, new office technology',
+    intro:
+      'Opening a business involves roughly forty decisions about technology, and the order matters more than the choices. First-time owners usually discover this when the internet cannot be installed for six weeks and the doors open on Monday. We work the list backward from your open date so nothing becomes an emergency.',
+    body: [
+      {
+        h: 'The order things have to happen in',
+        p: 'Internet first, because a fiber build can run sixty days or more and nothing else can be tested without it. Cabling next, before the walls close. Then the rack, network and wireless, before furniture arrives. Phones, cameras and point of sale at trim. Accounts and email can happen in parallel at any point.',
+      },
+      {
+        h: 'What we set up',
+        list: [
+          'Internet circuit sourcing, ordering and install coordination',
+          'Structured cabling to every desk, register and device location',
+          'Rack, firewall, switching and business wireless',
+          'Business phone system and number porting or new numbers',
+          'Microsoft 365 or Google Workspace, domain, email and shared files',
+          'Security cameras and door access',
+          'Point-of-sale terminals and payment connectivity',
+          'Workstations, printers and the day-one setup for your staff',
+        ],
+      },
+      {
+        h: 'Sized to a real budget',
+        p: 'A new business does not need enterprise equipment, and we will not quote it. We specify gear that fits the size you are now with room for the size you expect to be, and we tell you plainly which items can be deferred to year two without painting you into a corner.',
+      },
+    ],
+    faqs: [
+      {
+        q: 'When should we contact you?',
+        a: 'As soon as the lease is signed. The internet circuit is the constraint and everything else schedules around it. Sixty to ninety days is comfortable. Less is workable but it narrows your carrier options and raises the cost.',
+      },
+      {
+        q: 'Can you work from our build-out drawings?',
+        a: 'Yes. Send the floor plan and we will mark up cable drops, equipment locations and the rack, then coordinate rough-in and trim with your general contractor.',
+      },
+    ],
+    related: ['office-moves', 'internet-phone-systems', 'point-of-sale'],
+  },
+  {
+    slug: 'green-tech',
+    category: 'projects',
+    nav: 'Energy Retrofits',
+    title: 'Green-Tech & Energy Retrofits',
+    h1: 'Commercial LED & Smart Building Retrofits',
+    metaTitle: 'LED & Smart Building Retrofits Tampa | Crossroads Technology',
+    metaDescription:
+      'Commercial LED lighting retrofits and smart building controls in Tampa Bay. Energy work with a measurable payback, installed by the contractor already on site.',
+    blurb:
+      'LED retrofits, smart thermostats and building controls — energy work with a payback you can calculate, done while we are already on site.',
+    icon: 'leaf',
+    keywords: 'commercial LED retrofit Tampa, smart thermostat installation, building controls',
+    intro:
+      'Lighting and cooling are the two largest controllable line items on a Florida commercial power bill. Both respond well to equipment that is cheap relative to what it saves. This is not a separate green initiative; it is low-voltage work we are already qualified to do, usually completed during a project we are on site for anyway.',
+    body: [
+      {
+        h: 'What we install',
+        list: [
+          'LED fixture and lamp retrofits for offices, warehouses and retail',
+          'Occupancy, vacancy and daylight sensors',
+          'Smart thermostats and zoned scheduling',
+          'Networked lighting control with schedules and scenes',
+          'Exterior and parking LED with photocell and timer control',
+          'Submetering so you can see where the consumption actually is',
+        ],
+      },
+      {
+        h: 'Payback, calculated from your bill',
+        p: 'We will not quote a savings percentage from a brochure. We count the fixtures, note the run hours, take your actual rate from a recent bill, and give you the arithmetic. Some rooms pay back in under two years and some are not worth touching. You get both answers.',
+      },
+      {
+        h: 'Cheapest while we are already there',
+        p: 'Lift time and labour mobilisation are a real share of the cost of this work. If we are already in the ceiling running cable or mounting access points, adding a lighting retrofit to the same visit costs materially less than bringing a crew back for it later.',
+      },
+    ],
+    faqs: [
+      {
+        q: 'Do you handle utility rebates?',
+        a: 'We will identify what your utility currently offers for commercial lighting and controls, and provide the fixture schedules and documentation those programs ask for. Rebate programs change often, so we confirm what is live at the time of the quote rather than promising a figure.',
+      },
+      {
+        q: 'Is this worth doing on a leased space?',
+        a: 'It depends on the term remaining and who pays the power bill. If you hold the meter and have three or more years left, usually yes. We will run the numbers before you commit, and tell you if the answer is no.',
+      },
+    ],
+    related: ['office-moves', 'structured-cabling', 'new-business-setup'],
   },
 ];
 
@@ -719,4 +1045,4 @@ const process = [
   { n: '04', h: 'Document and support', p: 'You get the as-builts, port maps, credentials and test results. Then we support what we built.' },
 ];
 
-module.exports = { site, credentials, clients, services, industries, areas, homeFaqs, pillars, process };
+module.exports = { site, credentials, clients, serviceCategories, services, industries, areas, homeFaqs, pillars, process };
